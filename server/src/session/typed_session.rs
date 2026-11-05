@@ -1,8 +1,7 @@
-use std::process::Output;
-
-use actix_session::{Session, SessionExt};
+use std::future::{Ready, ready};
+use actix_session::{Session, SessionExt, SessionGetError, SessionInsertError};
 use actix_web::FromRequest;
-use sqlx::{Type, types::uuid};
+
 
 
 pub struct TypedSession(Session);
@@ -10,27 +9,29 @@ pub struct TypedSession(Session);
 impl TypedSession {
     const USER_ID: &'static str = "user_id";
 
-    fn insert(&self, id: uuid::Uuid ) {
-        self.0.insert(Self::USER_ID, id);
+    pub fn renew(&self) {
+        self.0.renew();
+    }
+    pub fn insert(&self, id: uuid::Uuid ) -> Result<(), SessionInsertError> {
+        self.0.insert(Self::USER_ID, id)
     }
 
-    fn get_user(&self) -> Option<uuid::Uuid> {
-        self.0.get(Self::USER_ID).unwrap()
+    pub fn get_user(&self) -> Result<Option<uuid::Uuid>, SessionGetError> {
+        self.0.get(Self::USER_ID)
     }
 
-    fn purge(self) {
+    pub fn logout(self) {
         self.0.purge();
     }
 }
 
 impl FromRequest for TypedSession {
 
-    type Error = <TypedSession as FromRequest>::Error;
-    type Future = Future<Output = Result<Self, Self::Error>>;
-    fn from_request(req: &actix_web::HttpRequest, payload: &mut actix_web::dev::Payload) -> Self::Future {
+    type Error = <Session as FromRequest>::Error;
+    type Future = Ready<Result<Self, Self::Error>>;
+    fn from_request(req: &actix_web::HttpRequest, _payload: &mut actix_web::dev::Payload) -> Self::Future {
         
-        Box::pin(async move {
-            Self(req.get_session())
-        })
+        ready(Ok(Self(req.get_session())))
+        
     }
 }

@@ -1,9 +1,9 @@
 use std::net::TcpListener;
 
 use actix_session::{SessionMiddleware, storage::RedisSessionStore};
-use actix_web::{App, HttpServer, cookie::Key, dev::Server, web};
+use actix_web::{App, HttpServer, cookie::Key, dev::Server, middleware::from_fn, web};
 
-use crate::{configuration::Settings, routes::healh_check};
+use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::health_check};
 
 pub struct Application {
     pub port: u16,
@@ -47,9 +47,10 @@ pub async fn run(listener: TcpListener, redis_uri: String ) -> Server {
                         session_key.clone(),
                     )
                 )
-                .route("/healh_check", web::get().to(healh_check))
+                .route("/healh_check", web::get().to(health_check))
                 .service(
                     web::scope("/api/v1")
+                        .wrap(from_fn(authentication_middle_ware))
                          
                 )         
         }

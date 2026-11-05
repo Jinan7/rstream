@@ -1,3 +1,3 @@
-mod healh_check;
+mod health_check;
 
-pub use healh_check::*;
+pub use health_check::*;
