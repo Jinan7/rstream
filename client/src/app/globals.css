@@ -49,14 +49,15 @@
 }
 
 @theme {
-  --color-background: #ededed;
-  --color-surface: #f30303;
-  --color-primary: #ffffff;
-  --color-primary-text: #3f3f3f;
-  --color-secondary-text: #aeaeae;
-  --color-secondary: #171717;
-  --color-on-secondary: #2c2c2c;
-  --color-on-secondary-text: #7b7b7b;
+  --color-rbackground: #ededed;
+  --color-rsurface: #f3030e;
+  --color-rprimary: #ffffff;
+  --color-rprimary-text: #3f3f3f;
+  --color-rsecondary-text: #aeaeae;
+  --color-rsurface-text: #ffffff;
+  --color-rsecondary: #171717;
+  --color-on-rsecondary: #2c2c2c;
+  --color-on-rsecondary-text: #7b7b7b;
 }
 
 :root {

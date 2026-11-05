@@ -1,8 +1,9 @@
-
+import Mobile from "@/app/_mobile/mobile";
+import Web from "@/app/_web/web";
 export default function Home() {
   return (
-    <div className="bg-secondary">
-      <p>Hello world</p>
+    <div>
+      <Web/>
     </div>
   )
 }
