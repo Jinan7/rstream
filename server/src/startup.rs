@@ -1,6 +1,7 @@
 use std::net::TcpListener;
 
-use actix_web::{App, HttpServer, dev::Server, web};
+use actix_session::{SessionMiddleware, storage::RedisSessionStore};
+use actix_web::{App, HttpServer, cookie::Key, dev::Server, web};
 
 use crate::{configuration::Settings, routes::healh_check};
 
@@ -10,7 +11,7 @@ pub struct Application {
 }
 
 impl Application {
-    pub fn build( config: Settings ) -> Self {
+    pub async fn build( config: Settings ) -> Self {
 
         let listener = TcpListener::bind(format!("{}:{}", config.application.host, config.application.port))
             .expect("failed to create tcp listener");
@@ -19,7 +20,7 @@ impl Application {
             .expect("failed to get listener address")
             .port();
 
-        let server = run(listener);
+        let server = run(listener).await;
 
         Self {
             port,
@@ -32,12 +33,26 @@ impl Application {
     }
 }
 
-pub fn run(listener: TcpListener ) -> Server {
-
+pub async fn run(listener: TcpListener ) -> Server {
+    let session_key = Key::generate();
+    let redis_store = RedisSessionStore::new("connection_string")
+        .await
+        .expect("Failed to create redis session store");
     HttpServer::new(
         || {
             App::new()
-                .route("/healh_check", web::get().to(healh_check))            
+                .route("/healh_check", web::get().to(healh_check))
+                .service(
+                    web::scope("/api/v1")
+                        .wrap(
+                            SessionMiddleware::new(
+                                redis_store.clone(),
+                                session_key.clone(),
+                            )
+                        )
+                        
+                    
+                )         
         }
     )
     .listen(listener)
