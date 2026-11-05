@@ -20,7 +20,7 @@ impl Application {
             .expect("failed to get listener address")
             .port();
 
-        let server = run(listener).await;
+        let server = run(listener, config.redis_uri).await;
 
         Self {
             port,
@@ -33,25 +33,24 @@ impl Application {
     }
 }
 
-pub async fn run(listener: TcpListener ) -> Server {
+pub async fn run(listener: TcpListener, redis_uri: String ) -> Server {
     let session_key = Key::generate();
-    let redis_store = RedisSessionStore::new("connection_string")
+    let redis_store = RedisSessionStore::new(redis_uri )
         .await
         .expect("Failed to create redis session store");
     HttpServer::new(
-        || {
+        move || {
             App::new()
+                .wrap(
+                    SessionMiddleware::new(
+                        redis_store.clone(),
+                        session_key.clone(),
+                    )
+                )
                 .route("/healh_check", web::get().to(healh_check))
                 .service(
                     web::scope("/api/v1")
-                        .wrap(
-                            SessionMiddleware::new(
-                                redis_store.clone(),
-                                session_key.clone(),
-                            )
-                        )
-                        
-                    
+                         
                 )         
         }
     )

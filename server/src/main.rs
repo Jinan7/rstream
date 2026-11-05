@@ -5,7 +5,7 @@ async fn main() {
     
     let config = get_configuration()
         .expect("failed to get server settings ");
-    let app = Application::build(config);
+    let app = Application::build(config).await;
 
     app.run().await
 }
