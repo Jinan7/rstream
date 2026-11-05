@@ -7,7 +7,7 @@ import NavSecondaryIcons from "@/app/_components/nav_secondary_icons"
 
 export default function NavBarMobile() {
     return (
-            <NavBar className="nav flex items-center gap-4 bg-red-100">
+            <NavBar>
                 <Menu className="shrink-0"/>
                 <SearchBar/>
                 <NavSecondaryIcons/>

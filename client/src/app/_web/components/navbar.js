@@ -8,9 +8,9 @@ import MovieCategories from "@/app/_components/movie_categories"
 
 export default function NavBarWeb() {
     return (
-            <NavBar className="nav flex items-center gap-4 bg-red-100">
+            <NavBar>
                 <Menu className="shrink-0"/>
-                <SearchBar/>
+                <SearchBar className="w-100"/>
                 <MovieCategories/>
                 <NavSecondaryIcons/>
             </NavBar>   
