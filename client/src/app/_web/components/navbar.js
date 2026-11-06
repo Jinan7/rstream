@@ -9,7 +9,7 @@ import MovieCategories from "@/app/_components/movie_categories"
 export default function NavBarWeb() {
     return (
             <NavBar>
-                <Menu className="shrink-0"/>
+                <Menu className="shrink-0 xl:collapse"/>
                 <SearchBar className="w-100"/>
                 <MovieCategories/>
                 <NavSecondaryIcons/>

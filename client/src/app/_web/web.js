@@ -6,6 +6,7 @@ import NavBarWeb from "@/app/_web/components/navbar"
 import BannerCarousel from "./components/banner_carousel"
 import MovieCategories from "../_components/movie_categories"
 import MovieSection from "../_components/movie_section"
+import SideBar from "./components/sidebar"
 
 export default function Web() {
     let data = {
@@ -16,15 +17,18 @@ export default function Web() {
         // nav bar
         <div>
             <NavBarWeb/>
-            <div className="px-4 flex flex-col gap-8">
-                <BannerCarousel/>
-                <div className="flex flex-col gap-5">
-                    <MovieSection data={data}/>
-                    <MovieSection data={data}/>
-                    <MovieSection data={data}/>
-                    <MovieSection data={data}/>
+            <div className="flex flex-row gap-6 px-4">
+                <SideBar/>
+                <div className="flex flex-col gap-8 grow">
+                    <BannerCarousel/>
+                    <div className="flex flex-col gap-5">
+                        <MovieSection data={data}/>
+                        <MovieSection data={data}/>
+                        <MovieSection data={data}/>
+                        <MovieSection data={data}/>
+                    </div> 
                 </div> 
-            </div>    
+            </div>   
         </div>
     )
 }
