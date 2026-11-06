@@ -36,7 +36,7 @@ export default function BannerCarousel({ children }) {
     return (   
         <div>   
             <Carousel 
-                orientation="horizontal" className="h-50 w-full"
+                orientation="horizontal" className="h-40 w-full"
                 opts={{
                     loop: true,
                 }}
@@ -46,7 +46,7 @@ export default function BannerCarousel({ children }) {
                     })
                 ]}
             >
-                <CarouselContent className="h-50">
+                <CarouselContent className="h-40">
                     {
                         banners.map( data => 
                             <CarouselItem className="basis-1/1">
@@ -58,8 +58,8 @@ export default function BannerCarousel({ children }) {
                     }
             
                 </CarouselContent>
-                <CarouselPrevious className=""/>
-                <CarouselNext className=""/>
+                <CarouselPrevious className="left-4"/>
+                <CarouselNext className="right-4"/>
         
 
             </Carousel>
