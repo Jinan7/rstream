@@ -14,7 +14,7 @@ export default function MovieCard({ data }) {
                         <p className="text-white text-[10px]">{year}</p>
                     </div>
                     <IconBackground background="bg-rsurface">
-                        <Play size={16}/>
+                        <Play className="text-white" size={16}/>
                     </IconBackground>
                 </div>
             </div>
