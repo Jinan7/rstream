@@ -1,9 +1,9 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import Banner from "./banner";
-import WatchButton from "./watch_button";
-import DownloadButton from "./download_button";
+import WatchButton from "@/app/_components/watch_button";
+import DownloadButton from "@/app/_components/download_button";
 import Autoplay from "embla-carousel-autoplay"
 import { Dot } from "lucide-react";
+import Banner from "@/app/_components/banner";
 
 export default function BannerCarousel({ children }) {
     const banners = [

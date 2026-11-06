@@ -19,7 +19,7 @@ export default function Responsive() {
   const matches = useMediaQuery(theme.breakpoints.up('sm'), { noSsr: true })
 
   return (
-    <div>
+    <div className='w-full h-full'>
       {
         matches ? (<Web/>) : (<Mobile/>)
       }
