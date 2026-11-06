@@ -2,6 +2,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Banner from "./banner";
 import WatchButton from "./watch_button";
 import DownloadButton from "./download_button";
+import Autoplay from "embla-carousel-autoplay"
+import { Dot } from "lucide-react";
 
 export default function BannerCarousel({ children }) {
     const banners = [
@@ -33,7 +35,17 @@ export default function BannerCarousel({ children }) {
 
     return (
         <div className="rounded-[24] overflow-hidden">
-            <Carousel orientation="vertical" className="bg-blue-300 h-100 w-full">
+            <Carousel 
+                orientation="vertical" className="bg-blue-300 h-100 w-full"
+                opts={{
+                    loop: true,
+                }}
+                plugins={[
+                    Autoplay({
+                        delay: 10000
+                    })
+                ]}
+            >
                 <CarouselContent className="h-100 rounded-md -mt-0">
                     {
                         banners.map( data => 
@@ -46,8 +58,8 @@ export default function BannerCarousel({ children }) {
                     }
             
                 </CarouselContent>
-                <CarouselPrevious className="top-3/10 left-9/10"/>
-                <CarouselNext className="bottom-3/10 left-9/10"/>
+                <CarouselPrevious className="top-3/10 left-auto right-4"/>
+                <CarouselNext className="bottom-3/10 left-auto right-4"/>
         
 
                 <div className="absolute bottom-4 left-4 w-6/10 flex flex-col gap-6">
@@ -56,9 +68,9 @@ export default function BannerCarousel({ children }) {
                             <h1 className="text-rsurface-text text-[25px] font-extrabold">AVATAR 3: FIRE AND ASH</h1>
                             <div className="movie-meta-data flex flex-row items-center gap-1.5">
                                 <p className="text-rsurface-text">2023</p>
-                                <div className="dot size-1.5 rounded-full bg-white"></div>
+                                <Dot className="text-white"/>
                                 <p className="text-rsurface-text">3 hrs</p>
-                                <div className="dot size-1.5 rounded-full bg-white"></div>
+                                <Dot className="text-white"/>
                                 <p className="text-rsurface-text">IMDB 8.3<span>/10</span></p>
                             </div>
                         </div>
