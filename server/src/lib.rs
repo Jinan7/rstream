@@ -4,3 +4,4 @@ pub mod configuration;
 pub mod authentication;
 pub mod session;
 pub mod errors;
+pub mod domain;

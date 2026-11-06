@@ -7,5 +7,6 @@ async fn main() {
         .expect("failed to get server settings ");
     let app = Application::build(config).await;
 
+
     app.run().await
 }
