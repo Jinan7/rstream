@@ -58,8 +58,8 @@ export default function BannerCarousel({ children }) {
                     }
             
                 </CarouselContent>
-                <CarouselPrevious className="left-4"/>
-                <CarouselNext className="right-4"/>
+                <CarouselPrevious className="left-4 invisible"/>
+                <CarouselNext className="right-4 invisible"/>
         
 
             </Carousel>

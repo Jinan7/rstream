@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/input-group"
 export default function Profile() {
     return (
-        <IconBackground>
+        <IconBackground background="bg-white">
             <Bell className="size-[16px]"/>
         </IconBackground>
     )
