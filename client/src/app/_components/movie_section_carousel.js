@@ -23,6 +23,21 @@ export default function MovieSectionCarousel() {
             title:"Money Heist",
             year:2019,
         },
+        {
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
       
     ]
     return (
@@ -34,10 +49,10 @@ export default function MovieSectionCarousel() {
             }}
     
         >
-            <CarouselContent className="h-40 bg-blue-100">
+            <CarouselContent className="h-40">
                 {
                     movies.map( data => 
-                        <CarouselItem className="basis-2/3">
+                        <CarouselItem className="basis-2/3 sm:basis-1/4">
                             <MovieCard data={data}/>
                         </CarouselItem>
                     )
