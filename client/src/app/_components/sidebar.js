@@ -5,7 +5,7 @@ import ContinueWatchingCard from "../_web/components/continue_watching_card";
 
 export default function SideBar() {
     return (
-        <div className="bg-white min-h-screen w-75 px-6 pt-10 pb-40 z-99">
+        <div className="bg-white h-screen w-75 px-6 pt-10 pb-40 z-99 overflow-scroll scrollbar-none">
             <div className="flex flex-col gap-6">
                 <SideBarItem label="Home">
                     <Home/>
