@@ -1,6 +1,6 @@
 import MovieCategoryIcon from "@/app/_components/movie_category_icon"
 import { useEffect } from "react"
-import { useCatogoriesContext } from "../_context/context"
+import { useCatogoriesContext, useSelectedCategory } from "../_context/context"
 export default function MovieCategories() {
 
     let categories = useCatogoriesContext()
@@ -15,6 +15,9 @@ export default function MovieCategories() {
         },
         ...categories, 
     ]
+
+    let selected = useSelectedCategory();
+    console.log(`selected ${selected}`)
     return (
         <div className="movie-categories-wrapper grow overflow-auto scrollbar-none">
             <div className="movie-categories flex gap-5">
@@ -25,7 +28,7 @@ export default function MovieCategories() {
                             key={category.id}
                             id={category.id}
                             label={category.genre}
-                            selected={"movies"}
+                            selected={selected}
                         />
                     )
                 }

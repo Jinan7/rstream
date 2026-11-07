@@ -5,22 +5,33 @@ let Context = createContext(null);
 export default function ContextProvider({ children }) {
 
     let [categories, setCategories] = useState([])
+    let [selectedCategory, setSelectedCategory] = useState("movies")
 
     return (
-        <Context value={{ categories, setCategories }}>
+        <Context value={{ categories, setCategories, selectedCategory, setSelectedCategory }}>
             {children}
         </Context>
     )
 }
 
-const useCatogoriesContext = () => {
+const useCategoriesContext = () => {
     let { categories } = useContext(Context)
     return categories
 }
 
-const useSetCatogoriesContext = () => {
+const useSetCategoriesContext = () => {
     let { setCategories } = useContext(Context)
     return setCategories
 }
 
-export { useCatogoriesContext, useSetCatogoriesContext }
+const useSelectedCategory = () => {
+    let { selectedCategory } = useContext(Context)
+    return selectedCategory
+}
+
+const useSetSelectedCategory = () => {
+    let { setSelectedCategory } = useContext(Context)
+    return setSelectedCategory
+}
+
+export { useCategoriesContext as useCatogoriesContext, useSetCategoriesContext as useSetCatogoriesContext, useSelectedCategory, useSetSelectedCategory }

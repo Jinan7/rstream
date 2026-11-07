@@ -6,7 +6,7 @@ import Mobile from "@/app/_mobile/mobile";
 import Web from "@/app/_web/web";
 import { useEffect } from 'react';
 import { getGenres } from './_lib/api';
-import { useSetCatogoriesContext } from './_context/context';
+import { useSetCatogoriesContext, useSetSelectedCategory } from './_context/context';
 
 
 export default function Responsive() {

@@ -10,7 +10,7 @@ import {
 export default function SearchBar() {
 
     return (
-        <InputGroup className="sm:w-75 border-none shadow-none bg-rprimary rounded-full">
+        <InputGroup className="sm:w-75 sm:shrink-0 border-none shadow-none bg-rprimary rounded-full">
             <InputGroupInput id="inline-start-input" placeholder="Search..." />
             <InputGroupAddon align="inline-start">
                 <SearchIcon className="text-muted-foreground" />
