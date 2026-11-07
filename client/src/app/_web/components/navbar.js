@@ -24,7 +24,7 @@ export default function NavBarWeb() {
                 <SearchBar className="w-100"/>
                 <MovieCategories/>
                 <NavSecondaryIcons/>
-                <SideBarScreen visible={showSideBar}/>
+                <SideBarScreen visible={showSideBar} setShowSideBar={setShowSideBar}/>
             </NavBar>   
     )
 }
