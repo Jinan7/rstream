@@ -7,8 +7,9 @@ import BannerCarousel from "./components/banner_carousel"
 import MovieCategories from "../_components/movie_categories"
 import MovieSection from "../_components/movie_section"
 import SideBar from "../_components/sidebar"
-import SideBarScreen from "../_components/sidebar_screen"
+import SideBarScreen from "./components/sidebar_screen"
 import PseudoSideBar from "../_components/pseudo_sidebar"
+import SideBarProvider from "../_context/sidebar_context"
 
 export default function Web() {
     let data = {
@@ -18,7 +19,9 @@ export default function Web() {
     return (
         // nav bar
         <div className="relative">
-            <NavBarWeb/>
+            <SideBarProvider>
+                <NavBarWeb/>
+            </SideBarProvider>
             <div className="flex flex-row gap-6 px-4">
                 <PseudoSideBar/>
                 <div className="flex flex-col gap-8 grow"

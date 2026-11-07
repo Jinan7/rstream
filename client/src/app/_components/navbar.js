@@ -3,7 +3,7 @@ import SearchBar from "@/app/_components/searchbar"
 import Notification from "@/app/_components/notification"
 import Profile from "@/app/_components/profile"
 import NavSecondaryIcons from "@/app/_components/nav_secondary_icons"
-import SideBarScreen from "./sidebar_screen"
+import SideBarScreen from "../_web/components/sidebar_screen"
 
 export default function NavBar({ children }) {
     return (

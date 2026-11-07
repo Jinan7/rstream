@@ -6,6 +6,8 @@ import NavBarMobile from "@/app/_mobile/components/navbar"
 import BannerCarousel from "./components/banner_carousel"
 import MovieSection from "../_components/movie_section"
 import MovieCategories from "../_components/movie_categories"
+import SideBarMobile from "./components/sidebar"
+import SideBarProvider from "../_context/sidebar_context"
 
 export default function Mobile() {
     let data = {
@@ -13,7 +15,9 @@ export default function Mobile() {
     }
     return (
         <div className="w-full min-h-full">
-            <NavBarMobile/>
+            <SideBarProvider>
+                <NavBarMobile/>
+            </SideBarProvider>
             <div className="w-full h-full mt-4 px-4 flex flex-col gap-6">
                 <BannerCarousel/>
                 <div className="flex flex-col gap-2">
