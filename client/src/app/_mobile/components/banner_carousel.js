@@ -8,6 +8,7 @@ import { Dot } from "lucide-react";
 export default function BannerCarousel({ children }) {
     const banners = [
         {
+            id: 1,
             url: "/images/avatar_fire_and_ash.jpg",
             title: "AVATAR 3: FIRE AND ASH",
             release_year: 2023,
@@ -16,6 +17,7 @@ export default function BannerCarousel({ children }) {
             description: ""
         },
         {
+            id: 2,
             url: "/images/avatar_fire_and_ash.jpg",
             title: "AVATAR 3: FIRE AND ASH",
             release_year: 2026,
@@ -24,6 +26,7 @@ export default function BannerCarousel({ children }) {
             description: ""
         },
         {
+            id: 3,
             url: "/images/avatar_fire_and_ash.jpg",
             title: "AVATAR 3: FIRE AND ASH",
             release_year: 2019,
@@ -49,7 +52,7 @@ export default function BannerCarousel({ children }) {
                 <CarouselContent className="h-40">
                     {
                         banners.map( data => 
-                            <CarouselItem className="basis-1/1">
+                            <CarouselItem key={data.id} className="basis-1/1">
                                 <Banner 
                                     image_url={data.url}
                                 />
