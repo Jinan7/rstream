@@ -32,6 +32,16 @@ export default function SideBar() {
                 <ContinueWatchingCard image_url="" />
                 <ContinueWatchingCard image_url="" />
                 <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
+                <ContinueWatchingCard image_url="" />
             </div>
         </div>
     )

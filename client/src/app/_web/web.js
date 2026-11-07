@@ -19,10 +19,11 @@ export default function Web() {
         // nav bar
         <div className="relative">
             <NavBarWeb/>
-            <SideBarScreen/>
             <div className="flex flex-row gap-6 px-4">
                 <PseudoSideBar/>
-                <div className="flex flex-col gap-8 grow">
+                <div className="flex flex-col gap-8 grow"
+                    
+                >
                     <BannerCarousel/>
                     <div className="flex flex-col gap-5">
                         <MovieSection data={data}/>

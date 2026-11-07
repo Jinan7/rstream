@@ -11,7 +11,6 @@ export default function NavBar({ children }) {
             <div className="nav w-full flex items-center gap-4">
                 {children}
             </div>
-            <SideBarScreen/>
         </div>
     )
 }
