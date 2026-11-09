@@ -1,0 +1,95 @@
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import WatchButton from "@/app/_components/watch_button";
+import DownloadButton from "@/app/_components/download_button";
+import Autoplay from "embla-carousel-autoplay"
+import { Dot } from "lucide-react";
+import Banner from "@/app/_components/banner";
+
+export default function BannerCarouselWeb({ children }) {
+    const banners = [
+        {
+            id: 1,
+            url: "/images/avatar_fire_and_ash.jpg",
+            title: "AVATAR 3: FIRE AND ASH",
+            release_year: 2023,
+            duration: 3,
+            rating: 8.2,
+            description: ""
+        },
+        {
+            id: 2,
+            url: "/images/avatar_fire_and_ash.jpg",
+            title: "AVATAR 3: FIRE AND ASH",
+            release_year: 2026,
+            duration: 3,
+            rating: 8.2,
+            description: ""
+        },
+        {
+            id: 3,
+            url: "/images/avatar_fire_and_ash.jpg",
+            title: "AVATAR 3: FIRE AND ASH",
+            release_year: 2019,
+            duration: 3,
+            rating: 8.2,
+            description: ""
+        }
+    ]
+
+    return (
+        <div className="rounded-[24] overflow-hidden">
+            <Carousel 
+                orientation="vertical" className="bg-blue-300 w-full"
+                opts={{
+                    loop: true,
+                }}
+                plugins={[
+                    Autoplay({
+                        delay: 10000
+                    })
+                ]}
+            >
+                <CarouselContent className="h-100 rounded-md -mt-0">
+                    {
+                        banners.map( data => 
+                            <CarouselItem key={data.id} className="basis-1/1 pt-0 rounded-md">
+                                <Banner 
+                                    image_url={data.url}
+                                />
+                            </CarouselItem>
+                        )
+                    }
+            
+                </CarouselContent>
+                <CarouselPrevious className="top-3/10 left-auto right-4"/>
+                <CarouselNext className="bottom-3/10 left-auto right-4"/>
+        
+
+                <div className="absolute bottom-4 left-4 w-6/10 flex flex-col gap-6">
+                    <div className="movie-info flex flex-col gap-4">
+                        <div className="flex flex-col gap-3">
+                            <h1 className="text-rsurface-text text-[25px] font-extrabold">AVATAR 3: FIRE AND ASH</h1>
+                            <div className="movie-meta-data flex flex-row items-center gap-1.5">
+                                <p className="text-rsurface-text">2023</p>
+                                <Dot className="text-white"/>
+                                <p className="text-rsurface-text">3 hrs</p>
+                                <Dot className="text-white"/>
+                                <p className="text-rsurface-text">IMDB 8.3<span>/10</span></p>
+                            </div>
+                        </div>
+                        <p className="movie-summary text-rsecondary-text text-[16px]">
+                            Avatar: Fire and Ash is an epic sci-fi adventure that continues
+                            the journey of Jake Sally and Neytiri as they protect their family
+                            and Pandora from growing threats
+                        </p>      
+                    </div>
+                    <div className="banner-buttons flex flex-row gap-4">
+                        <WatchButton/>
+                        <DownloadButton/>
+                    </div>
+                </div>
+            </Carousel>
+        </div>
+        
+    )
+}
