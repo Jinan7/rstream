@@ -1,8 +1,10 @@
 
-export default function IconBackground({ children, className }) {
+export default function IconBackground({ children, className, onClick }) {
 
     return (
-        <div className={`flex items-center justify-center shrink-0 box-border rounded-full ${className}`}>
+        <div className={`flex items-center justify-center shrink-0 box-border rounded-full ${className}`}
+            onClick={onClick}
+        >
             {children}
         </div>
     )

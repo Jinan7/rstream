@@ -1,5 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import MovieCard from "./movie_card";
+import MovieCardPortrait from "./movie_card_portrait";
 
 export default function MovieSectionCarousel({ aspect, className }) {
     const movies = [
@@ -60,7 +61,11 @@ export default function MovieSectionCarousel({ aspect, className }) {
                 {
                     movies.map( data => 
                         <CarouselItem key={data.id} className={`${className}`}>
-                            <MovieCard data={data} className={aspect}/>
+                            {
+                                aspect === "aspect-16/9" ?
+                                <MovieCard data={data} className={aspect}/> :
+                                <MovieCardPortrait image_url={data.image_url} title={data.title} year={data.year} className={aspect}/>
+                            }
                         </CarouselItem>
                     )
                 }
