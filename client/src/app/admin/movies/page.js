@@ -1,9 +1,7 @@
-'use client'
 import Link from "next/link";
 import MovieCard from "./_components/movie_card";
 import PseudoSideBar from "./_components/pseudo_sidebar";
 import { Plus } from "lucide-react";
-import { usePathname } from "next/navigation";
 import AddNewMovie from "./_components/add_new_movie_button";
 
 export default function AdminConsole() {
