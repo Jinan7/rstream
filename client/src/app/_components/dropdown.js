@@ -13,12 +13,7 @@ export default function Dropdown() {
         <div className={` ${ state.visible ? "visible" : "collapse" } w-50 bg-white absolute top-full right-0 mt-1 rounded-sm px-4 py-4`}>
             <div className="flex flex-col gap-4">
                 {
-                    // if (state.id == 'profile') {
-                    //     return (<ProfileDropdown/>)
-                    // } else {
-                    //     return (<NotificationsDropdown/>)
-                    // }
-
+                
                     state.id === 'profile' ? 
                         <ProfileDropdown/> :
                     state.id === 'notifications' ?
