@@ -1,9 +1,10 @@
 'use client'
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import FormField from "./_components/form_field";
 import DurationField from "./_components/duration_field";
 import MultiFormField from "./_components/multiformfield";
 import MultiFormInput from "./_components/multiform_input";
+import { v4 } from "uuid";
 
 export default function Page() {
 
@@ -19,6 +20,30 @@ export default function Page() {
     let summaryRef = useRef(null)
     let portraitRef = useRef(null)
     let bannerRef = useRef(null)
+    let [directors, setDirectors] = useState([])
+    let [writers, setWriters] = useState([])
+    let [starts, setStars] = useState([])
+    const handleAddDirector = () => {
+        let newDirector = directorRef.current.value
+
+        setDirectors([
+            ...directors, {key:v4(), value:newDirector}
+        ])
+        directorRef.current.value = ""
+    }
+    const handleRemoveDirector = (key) => {
+        return () => {
+            let temp = [...directors]
+            for (let i=0; i<temp.length; i++) {
+        
+                if (temp[i].key == key) {
+                    temp.splice(i,1)
+                }
+            }
+
+            setDirectors(temp)
+        }
+    }
     return (<div className="grow">
         <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
             <p className="font-bold text-[20px]">Details</p>
@@ -31,11 +56,11 @@ export default function Page() {
             <FormField label="IMDB rating" type={"text"} ref={ratingRef}/>
             <FormField label="Genre" type={"text"} ref={genreRef}/>
             <FormField label="Popularity" type={"text"} ref={popularityRef}/>
-            <MultiFormField label="Director" type={"text"} ref={directorRef}/>
+            <MultiFormField label="Director" type={"text"} ref={directorRef} onClick={handleAddDirector}/>
             <div className="flex flex-col gap-1">
-                <MultiFormInput text="Guy Ritchie"/>
-                <MultiFormInput text="Quentin Tarantino"/>
-                <MultiFormInput text="RR Martin"/>
+                {
+                    directors.map((director) => <MultiFormInput key={director.key} text={director.value} onClick={handleRemoveDirector(director.key)}/>)
+                }
             </div>
             <MultiFormField label="Writers" type={"text"} ref={writersRef}/>
             <MultiFormField label="Stars" type={"text"} ref={starsRef}/>
