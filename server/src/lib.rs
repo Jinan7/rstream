@@ -5,3 +5,4 @@ pub mod authentication;
 pub mod session;
 pub mod errors;
 pub mod domain;
+pub mod s3;

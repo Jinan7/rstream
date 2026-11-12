@@ -7,9 +7,13 @@ import MultiFormInput from "./_components/multiform_input";
 import { v4 } from "uuid";
 import TextField from "./_components/text_field";
 import { postMovieDetails } from "./_lib/api";
+import { addFormInput, removeFormInput, useDirectorsReducer, useMultiFormReducer } from "./_lib/multiFormReducer";
+import { putFile } from "./_lib/put";
 
+const FIVE_GIGABYTES = 5 * 1024 * 1024;
 export default function Page() {
 
+    let [id,setId] = useState(null)
     let titleRef =  useRef(null)
     let releaseDateRef = useRef(null)
     let hourRef = useRef(null)
@@ -23,57 +27,33 @@ export default function Page() {
     let summaryRef = useRef(null)
     let portraitRef = useRef(null)
     let bannerRef = useRef(null)
-    let [directors, setDirectors] = useState([])
-    let [writers, setWriters] = useState([])
-    let [stars, setStars] = useState([])
+    let [directors, directorsDispatch] = useMultiFormReducer([])
+    let [writers, writersDispatch] = useMultiFormReducer([])
+    let [stars, starsDispatch] = useMultiFormReducer([])
+
     const handleAddDirector = () => {
         let newDirector = directorRef.current.value
-
-        setDirectors([
-            ...directors, {key:v4(), value:newDirector}
-        ])
+        addFormInput(directorsDispatch, newDirector)
         directorRef.current.value = ""
     }
     const handleRemoveDirector = (key) => {
-        return () => {
-            let temp = [...directors]
-            for (let i=0; i<temp.length; i++) {
-        
-                if (temp[i].key == key) {
-                    temp.splice(i,1)
-                }
-            }
-
-            setDirectors(temp)
-        }
+        return () => removeFormInput(directorsDispatch, key)
     }
     const handleAddWriter = () => {
         let newWriter = writersRef.current.value
-
-        setWriters([
-            ...writers, {key:v4(), value:newWriter}
-        ])
+        addFormInput(writersDispatch, newWriter)
         writersRef.current.value = ""
     }
     const handleRemoveWriter = (key) => {
-        return () => {
-            let temp = writers.filter((writer) => writer.key != key )
-            setWriters(temp)
-        }
+        return () => removeFormInput(writersDispatch, key)
     }
     const handleAddStar = () => {
         let newStar = starsRef.current.value
-
-        setStars([
-            ...stars, {key:v4(), value:newStar}
-        ])
+        addFormInput(starsDispatch, newStar)
         starsRef.current.value = ""
     }
     const handleRemoveStar = (key) => {
-        return () => {
-            let temp = stars.filter((star) => star.key != key )
-            setStars(temp)
-        }
+        return () => removeFormInput(starsDispatch, key)
     }
 
     const handlePostMovieDetails = async () => {
@@ -103,11 +83,44 @@ export default function Page() {
             summary: summary
         }
         
+        try {
+            let movieData = await postMovieDetails(data)
+            setId(movieData.id)
+        } catch (e) {
+            if (e.response) {
+                console.log(e.response)
+            } else if (e.request) {
+                console.log(e.request)
+            }
+            
+        }
+        
+        
+            
+        
+    }
 
-        await postMovieDetails(data)
+    const handleUploadMoviePortrait = async () => {
+        console.log(portraitRef.current.files[0])
+        let file = portraitRef.current.files[0];
+
+        if (file && id) {
+            
+            await putFile(id, file)
+        } else {
+
+        }
+        
+       
+    }
+
+
+
+    const handleUploadMovieBanner = () => {
+         console.log(bannerRef.current.files[0])
     }
     return (<div className="flex flex-col gap-4 grow">
-        <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
+        <div className="flex flex-col gap-3 bg-rprimary py-10 px-6 rounded-[24]">
             <p className="font-bold text-[20px]">Details</p>
             <FormField label="Title" type={"text"} ref={titleRef}/>
             <div className="flex flex-row gap-2 items-center justify-between w-1/2">
@@ -119,15 +132,16 @@ export default function Page() {
             <FormField label="Genre" type={"text"} ref={genreRef}/>
             <FormField label="Popularity" type={"text"} ref={popularityRef}/>
             <MultiFormField label="Director" type={"text"} ref={directorRef} onInput={handleAddDirector} onRemove={handleRemoveDirector} data={directors}/>
-            <MultiFormField label="Writers" type={"text"} ref={writersRef} onInput={handleAddWriter} onRemove={handleRemoveWriter} data={writers}/>
-            <MultiFormField label="Stars" type={"text"} ref={starsRef} onInput={handleAddStar} onRemove={handleRemoveStar} data={stars}/>
+            <MultiFormField label="Writer" type={"text"} ref={writersRef} onInput={handleAddWriter} onRemove={handleRemoveWriter} data={writers}/>
+            <MultiFormField label="Star" type={"text"} ref={starsRef} onInput={handleAddStar} onRemove={handleRemoveStar} data={stars}/>
             <TextField label="Summary" type={"text"} ref={summaryRef}/>
-            <button className="bg-sky-blue rounded-sm px-3 font-bold" onClick={handlePostMovieDetails}>Submit</button>
+            <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handlePostMovieDetails}>Submit</button>
         </div>
         <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
             <p className="font-bold text-[20px]">Pictures</p>
-            <FormField label="Portrait" type={"file"} ref={portraitRef} disabled/>
-            <FormField label="Banner" type={"file"} ref={bannerRef} disabled/>
+            <FormField label="Portrait" type={"file"} ref={portraitRef} disabled={false}/>
+            <FormField label="Banner" type={"file"} ref={bannerRef} disabled={!id}/>
+            <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handleUploadMoviePortrait}>Submit</button>
         </div>
     </div>)
 }

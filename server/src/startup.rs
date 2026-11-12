@@ -5,13 +5,17 @@ use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middleware::from_fn, web};
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies}};
+use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies::{self, posters::get_presigned_url}}, s3};
 
 pub struct Application {
     pub port: u16,
     pub server: Server
 }
 
+pub struct Bucket(pub String);
+
+
+pub struct PresignedExpiresIn(pub u64);
 impl Application {
     pub async fn build( config: Settings ) -> Self {
 
@@ -24,7 +28,9 @@ impl Application {
 
         let pool = PgPool::connect_lazy_with(config.database.with_db());
 
-        let server = run(listener, pool, config.redis_uri).await;
+        let s3_config = s3::config::config().await;
+        let s3_client = aws_sdk_s3::Client::new(&s3_config);
+        let server = run(listener, pool, config.redis_uri, config.s3.bucket, config.s3.presigned_expires_in, s3_client).await;
 
         
 
@@ -39,9 +45,11 @@ impl Application {
     }
 }
 
-pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String ) -> Server {
-    
+pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket: String, presigned_expires_in: u64, s3_client: aws_sdk_s3::Client) -> Server {
+    let s3_client = web::Data::new(s3_client);
     let pool = web::Data::new(pool);
+    let bucket = web::Data::new(Bucket(bucket));
+    let presigned_expires_in = web::Data::new(PresignedExpiresIn(presigned_expires_in));
     let session_key = Key::generate();
     let redis_store = RedisSessionStore::new(redis_uri )
         .await
@@ -68,9 +76,13 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String ) -> Ser
                     web::scope("/api/v1")
                         .route("/genres", web::get().to(genres::get))
                         .route("/movies", web::post().to(movies::post))
+                        .route("/movies/posters/{id}/{key}",web::get().to(get_presigned_url))
                          
                 )  
-                .app_data(pool.clone())       
+                .app_data(pool.clone()) 
+                .app_data(bucket.clone())  
+                .app_data(presigned_expires_in.clone())  
+                .app_data(s3_client.clone())  
         }
     )
     .listen(listener)

@@ -7,6 +7,7 @@ pub struct Settings {
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
     pub redis_uri: String,
+    pub s3: S3Settings
 }
 
 
@@ -27,6 +28,11 @@ pub struct ApplicationSettings {
     pub hmac_secret: String
 }
 
+#[derive(serde::Deserialize, Clone)]
+pub struct S3Settings {
+    pub bucket: String,
+    pub presigned_expires_in: u64,
+}
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 
     let base_path = std::env::current_dir()
