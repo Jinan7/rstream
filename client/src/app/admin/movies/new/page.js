@@ -5,12 +5,15 @@ import DurationField from "./_components/duration_field";
 import MultiFormField from "./_components/multiformfield";
 import MultiFormInput from "./_components/multiform_input";
 import { v4 } from "uuid";
+import TextField from "./_components/text_field";
+import { postMovieDetails } from "./_lib/api";
 
 export default function Page() {
 
     let titleRef =  useRef(null)
     let releaseDateRef = useRef(null)
-    let durationRef = useRef(null)
+    let hourRef = useRef(null)
+    let minRef = useRef(null)
     let ratingRef = useRef(null)
     let genreRef = useRef(null)
     let popularityRef = useRef(null)
@@ -22,7 +25,7 @@ export default function Page() {
     let bannerRef = useRef(null)
     let [directors, setDirectors] = useState([])
     let [writers, setWriters] = useState([])
-    let [starts, setStars] = useState([])
+    let [stars, setStars] = useState([])
     const handleAddDirector = () => {
         let newDirector = directorRef.current.value
 
@@ -44,29 +47,87 @@ export default function Page() {
             setDirectors(temp)
         }
     }
-    return (<div className="grow">
+    const handleAddWriter = () => {
+        let newWriter = writersRef.current.value
+
+        setWriters([
+            ...writers, {key:v4(), value:newWriter}
+        ])
+        writersRef.current.value = ""
+    }
+    const handleRemoveWriter = (key) => {
+        return () => {
+            let temp = writers.filter((writer) => writer.key != key )
+            setWriters(temp)
+        }
+    }
+    const handleAddStar = () => {
+        let newStar = starsRef.current.value
+
+        setStars([
+            ...stars, {key:v4(), value:newStar}
+        ])
+        starsRef.current.value = ""
+    }
+    const handleRemoveStar = (key) => {
+        return () => {
+            let temp = stars.filter((star) => star.key != key )
+            setStars(temp)
+        }
+    }
+
+    const handlePostMovieDetails = async () => {
+        let title = titleRef.current.value;
+        let releaseDate = releaseDateRef.current.value;
+        let hours = hourRef.current.value;
+        let mins = minRef.current.value;
+        let duration = +hours * 60 + +mins;
+        let imdbRating = +ratingRef.current.value;
+        let genre = genreRef.current.value;
+        let popularity = +popularityRef.current.value;
+        let directorsList = directors.map((d) => d.value )
+        let writersList = writers.map((w) => w.value )
+        let starsList = stars.map((s) => s.value )
+        let summary = summaryRef.current.value;
+
+        let data = {
+            title: title,
+            releaseDate: releaseDate,
+            duration: duration,
+            imdbRating: imdbRating,
+            genre: genre,
+            popularity: popularity,
+            directors: directorsList,
+            writers: writersList,
+            stars: starsList,
+            summary: summary
+        }
+        
+
+        await postMovieDetails(data)
+    }
+    return (<div className="flex flex-col gap-4 grow">
         <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
             <p className="font-bold text-[20px]">Details</p>
             <FormField label="Title" type={"text"} ref={titleRef}/>
             <div className="flex flex-row gap-2 items-center justify-between w-1/2">
                 <FormField label="Release date" type={"date"} ref={releaseDateRef}/>
-                <DurationField/>
+                <DurationField hourRef={hourRef} minRef={minRef}/>
             </div>
             
             <FormField label="IMDB rating" type={"text"} ref={ratingRef}/>
             <FormField label="Genre" type={"text"} ref={genreRef}/>
             <FormField label="Popularity" type={"text"} ref={popularityRef}/>
-            <MultiFormField label="Director" type={"text"} ref={directorRef} onClick={handleAddDirector}/>
-            <div className="flex flex-col gap-1">
-                {
-                    directors.map((director) => <MultiFormInput key={director.key} text={director.value} onClick={handleRemoveDirector(director.key)}/>)
-                }
-            </div>
-            <MultiFormField label="Writers" type={"text"} ref={writersRef}/>
-            <MultiFormField label="Stars" type={"text"} ref={starsRef}/>
-            <FormField label="Summary" type={"text"} ref={summaryRef}/>
-            <FormField label="Portrait" type={"file"} ref={portraitRef}/>
-            <FormField label="Banner" type={"file"} ref={bannerRef}/>
+            <MultiFormField label="Director" type={"text"} ref={directorRef} onInput={handleAddDirector} onRemove={handleRemoveDirector} data={directors}/>
+            <MultiFormField label="Writers" type={"text"} ref={writersRef} onInput={handleAddWriter} onRemove={handleRemoveWriter} data={writers}/>
+            <MultiFormField label="Stars" type={"text"} ref={starsRef} onInput={handleAddStar} onRemove={handleRemoveStar} data={stars}/>
+            <TextField label="Summary" type={"text"} ref={summaryRef}/>
+            <button className="bg-sky-blue rounded-sm px-3 font-bold" onClick={handlePostMovieDetails}>Submit</button>
+        </div>
+        <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
+            <p className="font-bold text-[20px]">Pictures</p>
+            <FormField label="Portrait" type={"file"} ref={portraitRef} disabled/>
+            <FormField label="Banner" type={"file"} ref={bannerRef} disabled/>
         </div>
     </div>)
 }

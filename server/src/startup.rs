@@ -5,7 +5,7 @@ use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middleware::from_fn, web};
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check}};
+use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies}};
 
 pub struct Application {
     pub port: u16,
@@ -67,6 +67,7 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String ) -> Ser
                 .service(
                     web::scope("/api/v1")
                         .route("/genres", web::get().to(genres::get))
+                        .route("/movies", web::post().to(movies::post))
                          
                 )  
                 .app_data(pool.clone())       
