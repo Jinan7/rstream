@@ -8,7 +8,7 @@ import { v4 } from "uuid";
 import TextField from "./_components/text_field";
 import { postMovieDetails } from "./_lib/api";
 import { addFormInput, removeFormInput, useDirectorsReducer, useMultiFormReducer } from "./_lib/multiFormReducer";
-import { putFile } from "./_lib/put";
+import { putFile, uploadFileMultipart } from "./_lib/put";
 
 const FIVE_GIGABYTES = 5 * 1024 * 1024;
 export default function Page() {
@@ -104,9 +104,16 @@ export default function Page() {
         console.log(portraitRef.current.files[0])
         let file = portraitRef.current.files[0];
 
+        console.log(`${file.size} ${FIVE_GIGABYTES}`)
+        
         if (file && id) {
             
-            await putFile(id, file)
+            if (file.size < FIVE_GIGABYTES) {
+                await putFile(id, file)
+            } else {
+                await uploadFileMultipart(id, file)
+            }
+            
         } else {
 
         }

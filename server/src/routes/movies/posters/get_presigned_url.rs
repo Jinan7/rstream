@@ -2,16 +2,13 @@ use actix_web::{HttpResponse, web};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 
-use crate::{errors::internal_server_error, s3::put::put_presigned, startup::{Bucket, PresignedExpiresIn}};
+use crate::{errors::internal_server_error, routes::movies::posters::PortraitInfo, s3::put::put_presigned, startup::{Bucket, PresignedExpiresIn}};
 
-#[derive(Deserialize)]
-pub struct PortraitInfo {
-    pub id: String,
-    pub key: String,
-}
+
 
 #[derive(Serialize)]
 pub struct ResponsePayload {
+    #[serde(rename = "presignedUrl")]
     pub presigned_url: String,
 }
 pub async fn get_presigned_url(
