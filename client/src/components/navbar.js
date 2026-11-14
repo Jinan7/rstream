@@ -3,10 +3,14 @@ import SearchBar from "@/app/_components/searchbar"
 import Notification from "@/app/_components/notification"
 import Profile from "@/app/_components/profile"
 import NavSecondaryIcons from "@/app/_components/nav_secondary_icons"
-import SideBarScreen from "../_web/components/sidebar_screen"
+import SideBarScreen from "../app/_web/components/sidebar_screen"
 import Dropdown from "./dropdown"
-import NavBarContextProvider, { useShowNavDropdown } from "../_context/navbar_context"
+import NavBarContextProvider, { useShowNavDropdown } from "../app/_context/navbar_context"
 import Link from "next/link"
+import NavButton from "./nav_button"
+import NavOption from "./nav_option"
+import ProfileButton from "./profile_button"
+import NotificationButton from "./notification_button"
 
 export default function NavBar({ children }) {
    
@@ -25,29 +29,14 @@ export default function NavBar({ children }) {
                     </div>
                 </div>
                 <div className="flex items-center">
-                    <div className="h-[40px] flex flex-col px-[16px]">
-                        <div className="grow flex items-center">
-                            <p className="font-bold text-[14px]">Movies</p>
-                        </div>
-                        <div className="h-[4px] bg-rsurface"></div>   
-                    </div>
-                    <div className="h-[40px] flex flex-col px-[16px]">
-                        <div className="grow flex items-center">
-                            <p className="font-bold text-[14px]">Series</p>
-                        </div>
-                        <div className="h-[4px] bg-rsurface"></div>   
-                    </div>
+                    <NavOption label={"Movies"}/>
+                    <NavOption label={"Series"}/>
                 </div>
                 <div className="flex items-center grow justify-end">
-                    <div className="flex items-center h-[40px]">
-                        <div className="w-[1px] bg-[#c6c6cd] self-stretch my-[8px]"/>
-                        <Bell className="mx-[16px]"/>
-                    </div>
-                    <div className="flex items-center h-[40px]">
-                        <div className="w-[1px] bg-[#c6c6cd] self-stretch my-[8px]"/>
-                        <UserRound className="mx-[16px]"/>
-                    </div>
+                    <NotificationButton/>
+                    <ProfileButton/>
                 </div>
+                <Dropdown/>
             </div>
         </NavBarContextProvider>
         

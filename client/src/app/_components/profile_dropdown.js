@@ -1,5 +1,5 @@
 import { Key, LogOut, UserRound } from "lucide-react";
-import DropdownButton from "./dropdown_button";
+import DropdownButton from "../../components/dropdown_button";
 import { Separator } from "@base-ui/react";
 
 export default function ProfileDropdown() {

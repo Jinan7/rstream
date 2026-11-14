@@ -9,7 +9,7 @@ import {
     InputGroupInput,
 
 } from "@/components/ui/input-group"
-import Dropdown from "./dropdown"
+import Dropdown from "../../components/dropdown"
 import { useState } from "react"
 import { useShowNavDropdownDispatch } from "../_context/navbar_context"
 import { handleToggleNavDropdown } from "../_lib/nav_dropdown_reducer"

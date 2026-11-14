@@ -52,6 +52,7 @@
 
 @theme {
   --color-rbackground: #f9f9f9;
+  --color-rborder: #e3e1d1;
   --color-rsurface: #f3030e;
   --color-rprimary: #ffffff;
   --color-rprimary-text: #3f3f3f;

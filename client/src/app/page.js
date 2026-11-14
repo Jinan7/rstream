@@ -62,11 +62,11 @@ export default function Home() {
   const handleToggleSideBar = () => setShowSideBar(!showSideBar)
   return (
     <div className="h-full">
-        <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] sticky top-[52px] z-99 bg-[#f9f9f9]">
+        <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] sticky top-[52px] z-98 bg-[#f9f9f9]">
             <div className="mx-[16px] flex items-center">
                 <SideBarToggle visible={showSideBar} onClick={handleToggleSideBar}/>  
             </div>
-            <div className="w-full max-w-full overflow-auto scrollbar-none">
+            <div className="w-full max-w-full overflow-auto scrollbar-">
                 <div className="flex gap-5 w-full h-full items-center">
                     <div className="px-[8px] shrink-0">
                         <p className="font-bold text-[14px]">Action</p>

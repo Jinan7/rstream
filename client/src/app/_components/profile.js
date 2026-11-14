@@ -9,7 +9,7 @@ import {
 
 } from "@/components/ui/input-group"
 import { useState } from "react"
-import Dropdown from "./dropdown"
+import Dropdown from "../../components/dropdown"
 import { useShowNavDropdownDispatch } from "../_context/navbar_context"
 import { handleToggleNavDropdown } from "../_lib/nav_dropdown_reducer"
 export default function Profile() {
