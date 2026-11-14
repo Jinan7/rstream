@@ -37,7 +37,7 @@ export default function BannerCarouselWeb({ children }) {
     ]
 
     return (
-        <div className="rounded-[24] overflow-hidden">
+        <div className="rounded-[8px] overflow-hidden">
             <Carousel 
                 orientation="vertical" className="bg-blue-300 w-full"
                 opts={{

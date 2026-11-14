@@ -1,6 +1,6 @@
 
 export default function Banner({ image_url }) {
-    console.log(image_url)
+    
     return (
         <div className={`w-full h-full rounded-md sm:rounded-none `}
             style={{

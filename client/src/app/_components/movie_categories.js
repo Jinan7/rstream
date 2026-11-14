@@ -27,7 +27,7 @@ export default function MovieCategories({ className }) {
         })()
     }, [])
     let selected = useSelectedCategory();
-    console.log(`selected ${selected}`)
+   
     return (
         <div className={`movie-categories-wrapper sm:grow max-w-full overflow-auto scrollbar-none ${className}`}>
             <div className="movie-categories flex gap-5">

@@ -2,7 +2,7 @@ use actix_web::{HttpResponse, web};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 
-use crate::{errors::internal_server_error, routes::movies::posters::PortraitInfo, s3::put::put_presigned, startup::{Bucket, PresignedExpiresIn}};
+use crate::{errors::internal_server_error, routes::movies::posters::PathInfo, s3::put::put_presigned, startup::{Bucket, PresignedExpiresIn}};
 
 
 
@@ -12,7 +12,7 @@ pub struct ResponsePayload {
     pub presigned_url: String,
 }
 pub async fn get_presigned_url(
-    info: web::Path<PortraitInfo>,
+    info: web::Path<PathInfo>,
     pool: web::Data<PgPool>,
     client: web::Data<aws_sdk_s3::Client>,
     bucket: web::Data<Bucket>,

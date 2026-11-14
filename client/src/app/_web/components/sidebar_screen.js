@@ -10,9 +10,6 @@ export default function SideBarScreen() {
 
     return (
         <div className={`xl:collapse w-screen flex flex-row fixed top-0 left-0 ${ showSideBar ? "visible" : "collapse"} z-99`}
-            onClick={(e) => {
-                console.log(e)
-            }}
             
         >
             <SideBar/>

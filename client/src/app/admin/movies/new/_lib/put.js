@@ -1,16 +1,24 @@
-import { completePosterMultipartUpload, createPosterMultipartUpload, getPosterPartPresignedUrl, getPosterPresignedUrl, putPart, putPoster } from "./api"
+import { completePosterMultipartUpload, completePutPoster, createPosterMultipartUpload, getPosterPartPresignedUrl, getPosterPresignedUrl, putPart, putPoster } from "./api"
 
 const CHUNK_SIZE = 5 * 1024 * 1024;
 
-export const putFile = async (id, file) => {
+export const putFile = async (id, file, aspect) => {
 
+    console.log("uploading file")
     let data = await getPosterPresignedUrl(`${id}/${file.name}`)
 
+    console.log(data)
     let response = await putPoster(data.presignedUrl, file)
+
     console.log(response)
+    let response2 = await completePutPoster(`${id}/${file.name}`, {
+        aspect: aspect
+    })
+
+    console.log(response2)
 }
 
-export const uploadFileMultipart = async (id, file) => {
+export const uploadFileMultipart = async (id, file, aspect) => {
     
     let stream = file.stream();
     let reader = stream.getReader({ mode: "byob" })
@@ -43,7 +51,7 @@ export const uploadFileMultipart = async (id, file) => {
             let response = await putPart(presignedUrl.presignedUrl, new Uint8Array(buffer))
             let etag = response.headers.etag;
             parts.push({ partNumber: partNumber, etag: etag })
-            console.log(response)
+            
             break;
         }
 
@@ -69,8 +77,12 @@ export const uploadFileMultipart = async (id, file) => {
     }
 
     let response = await completePosterMultipartUpload(key, {
-        uploadId: uploadId.uploadId,
-        parts: parts
-    })
-    console.log(response)
+            uploadId: uploadId.uploadId,
+            parts: parts
+        },
+        {
+            aspect: aspect
+        }
+    )
+    
 }

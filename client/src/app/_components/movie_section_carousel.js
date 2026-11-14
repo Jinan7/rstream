@@ -46,6 +46,48 @@ export default function MovieSectionCarousel({ aspect, className }) {
             title:"Money Heist",
             year:2019,
         },
+        {
+            id: 8,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            id: 9,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            id: 10,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            id: 11,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            id: 12,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            id: 13,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
+        {
+            id: 14,
+            image_url:"/images/avatar_fire_and_ash.jpg",
+            title:"Money Heist",
+            year:2019,
+        },
       
     ]
     return (

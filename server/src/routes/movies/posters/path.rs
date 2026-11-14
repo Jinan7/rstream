@@ -1,7 +1,12 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct PortraitInfo {
+pub struct PathInfo {
     pub id: String,
     pub key: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct QueryInfo {
+    pub aspect: String,
 }

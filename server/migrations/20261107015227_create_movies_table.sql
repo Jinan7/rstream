@@ -10,5 +10,7 @@ CREATE TABLE movies(
     directors TEXT[] NOT NULL,
     writers TEXT[] NOT NULL,
     stars TEXT[] NOT NULL,
-    summary TEXT NOT NULL
+    summary TEXT NOT NULL,
+    portrait_url TEXT NOT NULL,
+    banner_url TEXT NOT NULL
 );

@@ -88,9 +88,9 @@ export default function Page() {
             setId(movieData.id)
         } catch (e) {
             if (e.response) {
-                console.log(e.response)
+                
             } else if (e.request) {
-                console.log(e.request)
+                
             }
             
         }
@@ -101,17 +101,17 @@ export default function Page() {
     }
 
     const handleUploadMoviePortrait = async () => {
-        console.log(portraitRef.current.files[0])
+        
         let file = portraitRef.current.files[0];
-
-        console.log(`${file.size} ${FIVE_GIGABYTES}`)
         
         if (file && id) {
             
             if (file.size < FIVE_GIGABYTES) {
-                await putFile(id, file)
+                console.log("uploading small file")
+                await putFile(id, file, 'portrait')
             } else {
-                await uploadFileMultipart(id, file)
+                console.log("uploading large file")
+                await uploadFileMultipart(id, file, 'portrait')
             }
             
         } else {
@@ -124,7 +124,7 @@ export default function Page() {
 
 
     const handleUploadMovieBanner = () => {
-         console.log(bannerRef.current.files[0])
+         
     }
     return (<div className="flex flex-col gap-4 grow">
         <div className="flex flex-col gap-3 bg-rprimary py-10 px-6 rounded-[24]">

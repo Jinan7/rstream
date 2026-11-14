@@ -24,13 +24,25 @@ export const putPoster = async (uri, file) => {
     return response
 }
 
+export const completePutPoster = async (key, params) => {
+    let response = await api.get(`/movies/posters/complete/${key}`, {
+        params: params
+    })
+    console.log(response)
+    return response
+}
+
 export const createPosterMultipartUpload = async (key) => {
     let response = await api.get(`/movies/posters/multipart/${key}`)
     return response.data
 }
 
-export const completePosterMultipartUpload = async (key, data) => {
-    let response = await api.post(`/movies/posters/complete_multipart/${key}`, data)
+export const completePosterMultipartUpload = async (key, data, params) => {
+    let response = await api.post(`/movies/posters/complete_multipart/${key}`, data, 
+        {
+            params: params
+        }
+    )
     return response
 }
 
@@ -41,7 +53,6 @@ export const getPosterPartPresignedUrl = async (key, data) => {
 
 export const putPart = async (uri, chunk) => {
 
-    console.log(chunk)
     let response = await api.put(uri, chunk, {
         headers: {
             "Content-Type" : "image/jpeg"

@@ -1,7 +1,7 @@
 use actix_web::{HttpResponse, web};
 use serde::{Deserialize, Serialize};
 
-use crate::{errors::internal_server_error, routes::movies::posters::PortraitInfo, s3::{self, upload_part}, startup::{Bucket, PresignedExpiresIn}};
+use crate::{errors::internal_server_error, routes::movies::posters::PathInfo, s3::{self, upload_part}, startup::{Bucket, PresignedExpiresIn}};
 
 #[derive(Deserialize)]
 pub struct RequestPayload {
@@ -17,7 +17,7 @@ struct ResponsePayload {
     presigned_url: String
 }
 pub async fn upload_part_presigned(
-    info: web::Path<PortraitInfo>,
+    info: web::Path<PathInfo>,
     bucket: web::Data<Bucket>,
     client: web::Data<aws_sdk_s3::Client>,
     payload: web::Json<RequestPayload>,

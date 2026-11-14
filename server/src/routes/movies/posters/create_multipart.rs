@@ -1,7 +1,7 @@
 use actix_web::{HttpResponse, web};
 use serde::Serialize;
 
-use crate::{errors::internal_server_error, routes::movies::posters::PortraitInfo, s3::create_multipart::create_multipart_upload, startup::Bucket};
+use crate::{errors::internal_server_error, routes::movies::posters::PathInfo, s3::create_multipart::create_multipart_upload, startup::Bucket};
 
 #[derive(Serialize)]
 struct ResponsePayload {
@@ -11,7 +11,7 @@ struct ResponsePayload {
 pub async fn create_multipart(
     client: web::Data<aws_sdk_s3::Client>,
     bucket: web::Data<Bucket>,
-    info: web::Path<PortraitInfo>
+    info: web::Path<PathInfo>
 ) -> Result<HttpResponse, actix_web::Error> {
 
     let key = format!("movies/{}/portrait/{}",info.id, info.key);

@@ -7,7 +7,8 @@ pub struct Settings {
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
     pub redis_uri: String,
-    pub s3: S3Settings
+    pub s3: S3Settings,
+    pub cloudfront: CloudfrontSettings,
 }
 
 
@@ -33,6 +34,12 @@ pub struct S3Settings {
     pub bucket: String,
     pub presigned_expires_in: u64,
 }
+
+#[derive(serde::Deserialize, Clone)]
+pub struct CloudfrontSettings {
+    pub domain: String
+}
+
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 
     let base_path = std::env::current_dir()

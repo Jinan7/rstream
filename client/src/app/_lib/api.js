@@ -5,7 +5,7 @@ const getGenres = async function() {
         let response = await api.get("/genres")
         return response.data
     } catch(e) {
-        console.log(e)
+       
     }
     
 }

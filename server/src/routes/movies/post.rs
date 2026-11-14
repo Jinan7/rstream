@@ -87,9 +87,11 @@ async fn insert_movie(
             directors,
             writers,
             stars,
-            summary
+            summary,
+            portrait_url,
+            banner_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)"#,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, '', '')"#,
         id,
         movie.title,
         movie.release_date,

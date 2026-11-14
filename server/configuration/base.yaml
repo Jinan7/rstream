@@ -11,3 +11,5 @@ redis_uri: "redis://127.0.0.1:6379"
 s3:
   bucket: "rstream-blob-storage"
   presigned_expires_in: 900
+cloudfront:
+  domain: "d23robfg978lnf.cloudfront.net"

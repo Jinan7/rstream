@@ -3,9 +3,10 @@ use std::net::TcpListener;
 use actix_cors::Cors;
 use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middleware::from_fn, web};
+use aws_sdk_s3::config::StalledStreamProtectionConfig;
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies::{self, posters::{complete_multipart, create_multipart, get_presigned_url, upload_part_presigned}}}, s3};
+use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}}, s3};
 
 pub struct Application {
     pub port: u16,
@@ -14,6 +15,7 @@ pub struct Application {
 
 pub struct Bucket(pub String);
 
+pub struct CloudFrontDomain(pub String);
 
 pub struct PresignedExpiresIn(pub u64);
 impl Application {
@@ -30,7 +32,7 @@ impl Application {
 
         let s3_config = s3::config::config().await;
         let s3_client = aws_sdk_s3::Client::new(&s3_config);
-        let server = run(listener, pool, config.redis_uri, config.s3.bucket, config.s3.presigned_expires_in, s3_client).await;
+        let server = run(listener, pool, config.redis_uri, config.s3.bucket, config.s3.presigned_expires_in, s3_client, config.cloudfront.domain).await;
 
         
 
@@ -45,10 +47,11 @@ impl Application {
     }
 }
 
-pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket: String, presigned_expires_in: u64, s3_client: aws_sdk_s3::Client) -> Server {
+pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket: String, presigned_expires_in: u64, s3_client: aws_sdk_s3::Client, cloudfront_domain_name: String) -> Server {
     let s3_client = web::Data::new(s3_client);
     let pool = web::Data::new(pool);
     let bucket = web::Data::new(Bucket(bucket));
+    let cloud_front_domain = web::Data::new(CloudFrontDomain(cloudfront_domain_name));
     let presigned_expires_in = web::Data::new(PresignedExpiresIn(presigned_expires_in));
     let session_key = Key::generate();
     let redis_store = RedisSessionStore::new(redis_uri )
@@ -80,12 +83,14 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket:
                         .route("/movies/posters/multipart/{id}/{key}", web::post().to(upload_part_presigned))
                         .route("/movies/posters/{id}/{key}",web::get().to(get_presigned_url))
                         .route("/movies/posters/complete_multipart/{id}/{key}", web::post().to(complete_multipart))
+                        .route("/movies/posters/complete/{id}/{key}", web::get().to(complete_put))
                          
                 )  
                 .app_data(pool.clone()) 
                 .app_data(bucket.clone())  
                 .app_data(presigned_expires_in.clone())  
                 .app_data(s3_client.clone())  
+                .app_data(cloud_front_domain.clone())
         }
     )
     .listen(listener)
