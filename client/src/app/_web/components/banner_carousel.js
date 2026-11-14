@@ -2,8 +2,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import WatchButton from "@/app/_components/watch_button";
 import DownloadButton from "@/app/_components/download_button";
 import Autoplay from "embla-carousel-autoplay"
-import { Dot } from "lucide-react";
+import { Dot, Download, Play } from "lucide-react";
 import Banner from "@/app/_components/banner";
+import LeftIconButton from "@/app/_components/left_icon_button";
+import RightIconButton from "@/app/_components/right_icon_button";
 
 export default function BannerCarouselWeb({ children }) {
     const banners = [
@@ -86,6 +88,7 @@ export default function BannerCarouselWeb({ children }) {
                     <div className="banner-buttons flex flex-row gap-4">
                         <WatchButton/>
                         <DownloadButton/>
+                        
                     </div>
                 </div>
             </Carousel>

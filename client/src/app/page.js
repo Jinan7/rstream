@@ -1,3 +1,4 @@
+'use client'
 import { getGenres } from "./_lib/api"
 import PseudoSideBar from "./_components/pseudo_sidebar"
 import ResponsiveBannerCarousel from "./_responsive/banner_carousel"
@@ -5,6 +6,8 @@ import MovieSection from "./_components/movie_section"
 import MovieCategories from "./_components/movie_categories"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sidebar } from "lucide-react"
+import SideBarToggle from "./_components/sidebar_toggle"
+import { useState } from "react"
 
 export default function Home() {
 
@@ -55,11 +58,13 @@ export default function Home() {
     },
   ]
 
+  let [showSideBar, setShowSideBar]  = useState(false)
+  const handleToggleSideBar = () => setShowSideBar(!showSideBar)
   return (
-    <div className="h-full relative sticky">
-        <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] absolute sticky">
+    <div className="h-full">
+        <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] sticky top-[52px] z-99 bg-[#f9f9f9]">
             <div className="mx-[16px] flex items-center">
-                <Sidebar/>
+                <SideBarToggle visible={showSideBar} onClick={handleToggleSideBar}/>  
             </div>
             <div className="w-full max-w-full overflow-auto scrollbar-none">
                 <div className="flex gap-5 w-full h-full items-center">
@@ -139,7 +144,7 @@ export default function Home() {
             </div>
         </div>
         <div className="flex h-full">
-            <div className="sidebar w-[280px] self-stretch flex border-r-[#e3e1d1] border-r-[1px]">
+            <div className={`sidebar w-[280px] self-stretch flex border-r-[#e3e1d1] border-r-[1px] ${showSideBar ? 'visible' : 'collapse'}`}>
                 
             </div>
             <div className="w-full h-full flex justify-center">
