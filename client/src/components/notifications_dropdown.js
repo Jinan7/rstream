@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import DropdownButton from "../../components/dropdown_button";
+import DropdownButton from "./dropdown_button";
 
 export default function NotificationsDropdown() {
     return (

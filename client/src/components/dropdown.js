@@ -2,8 +2,8 @@
 import { LogOut, UserRound } from "lucide-react";
 import DropdownButton from "./dropdown_button";
 import { useNavDropdownState } from "../app/_context/navbar_context";
-import ProfileDropdown from "../app/_components/profile_dropdown";
-import NotificationsDropdown from "../app/_components/notifications_dropdown";
+import ProfileDropdown from "./profile_dropdown";
+import NotificationsDropdown from "./notifications_dropdown";
 
 export default function Dropdown() {
 

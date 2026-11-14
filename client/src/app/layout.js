@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ContextProviderWrapper from "./context_provider_wrapper";
 import SideBarProvider from "./_context/sidebar_context";
-import ResponsiveNavBar from "./_responsive/navbar";
+import NavBar from "@/components/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         <ContextProviderWrapper>
             <div className="relative h-full">
                 <SideBarProvider>
-                    <ResponsiveNavBar/>
+                    <NavBar/>
                 </SideBarProvider>
                 { children }
             </div>
