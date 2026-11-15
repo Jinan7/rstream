@@ -1,16 +1,11 @@
 'use client'
 import { useRef, useState } from "react";
-import FormField from "./_components/form_field";
-import DurationField from "./_components/duration_field";
-import MultiFormField from "./_components/multiformfield";
-import MultiFormInput from "./_components/multiform_input";
 import { v4 } from "uuid";
-import TextField from "./_components/text_field";
 import { postMovieDetails } from "./_lib/api";
 import { addFormInput, removeFormInput, useDirectorsReducer, useMultiFormReducer } from "./_lib/multiFormReducer";
 import { putFile, uploadFileMultipart } from "./_lib/put";
 import Button from "@/app/_components/button";
-import { Image, PictureInPicture, X } from "lucide-react";
+import { Image, PictureInPicture, Upload, X } from "lucide-react";
 import IconButton from "@/app/_components/icon_button";
 import UploadProgress from "./_components/upload_progress";
 import FileInput from "./_components/file_input";
@@ -19,15 +14,18 @@ import MultiTextInput from "./_components/multi_text_input";
 import DateInput from "./_components/date_input";
 import DurationInput from "./_components/duration_input";
 import Input from "./_components/input";
+import LeftIconButton from "@/app/_components/left_icon_button";
+import TextField from "./_components/text_field";
 
-const FIVE_GIGABYTES = 5 * 1024 * 1024;
+const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Page() {
 
-    let [id,setId] = useState(null)
-    let titleRef =  useRef(null)
+    let [id, setId] = useState(null)
+    let titleRef = useRef(null)
     let releaseDateRef = useRef(null)
     let hourRef = useRef(null)
     let minRef = useRef(null)
+    let durationRef = useRef(null)
     let ratingRef = useRef(null)
     let genreRef = useRef(null)
     let popularityRef = useRef(null)
@@ -40,11 +38,21 @@ export default function Page() {
     let [directors, directorsDispatch] = useMultiFormReducer([])
     let [writers, writersDispatch] = useMultiFormReducer([])
     let [stars, starsDispatch] = useMultiFormReducer([])
+    let [showDurationDropdown, setShowDurationDropdown] = useState(false)
 
+    const handleToggleDurationDropdown = () => setShowDurationDropdown(!showDurationDropdown)
+    const handleUpdateDurationInput = () => {
+        let hours = hourRef.current.value
+        let mins = minRef.current.value
+        let display = `${hours}:${mins}`
+        durationRef.current.value = display
+        setShowDurationDropdown(false)
+    }
     const handleAddDirector = () => {
         let newDirector = directorRef.current.value
         addFormInput(directorsDispatch, newDirector)
         directorRef.current.value = ""
+        console.log(directors)
     }
     const handleRemoveDirector = (key) => {
         return () => removeFormInput(directorsDispatch, key)
@@ -75,9 +83,9 @@ export default function Page() {
         let imdbRating = +ratingRef.current.value;
         let genre = genreRef.current.value;
         let popularity = +popularityRef.current.value;
-        let directorsList = directors.map((d) => d.value )
-        let writersList = writers.map((w) => w.value )
-        let starsList = stars.map((s) => s.value )
+        let directorsList = directors.map((d) => d.value)
+        let writersList = writers.map((w) => w.value)
+        let starsList = stars.map((s) => s.value)
         let summary = summaryRef.current.value;
 
         let data = {
@@ -92,75 +100,74 @@ export default function Page() {
             stars: starsList,
             summary: summary
         }
-        
+
         try {
             let movieData = await postMovieDetails(data)
             setId(movieData.id)
         } catch (e) {
             if (e.response) {
-                
+
             } else if (e.request) {
-                
+
             }
-            
+
         }
-        
-        
-            
-        
     }
 
     const handleUploadMoviePortrait = async () => {
-        
         let file = portraitRef.current.files[0];
-        
+
         if (file && id) {
-            
-            if (file.size < FIVE_GIGABYTES) {
+
+            if (file.size < FIVE_MEGABYTES) {
                 console.log("uploading small file")
                 await putFile(id, file, 'portrait')
             } else {
                 console.log("uploading large file")
                 await uploadFileMultipart(id, file, 'portrait')
             }
-            
+
         } else {
 
         }
-        
-       
     }
 
 
 
     const handleUploadMovieBanner = () => {
-         
+
     }
 
     return (
-        <div className="flex gap-[20px]">
-            <div className="bg-white border-rborder border-[1px] rounded-[2px]">
+        <div className="flex gap-[20px] ">
+            <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
                 <div className="px-[20px] pt-[12px] pb-[8px]">
                     <p className="text-[20px] font-bold invisible">Details</p>
                 </div>
                 <div className="flex flex-col gap-[20px] px-[20px] pt-[4px] pb-[20px]">
                     <div className="flex flex-col gap-[4px]">
                         <p className="text-[#201e1b] text-[14px] font-bold">Directors</p>
-                        <Input/>
-                        <Input/>
-                        <Input/>
+                        {
+                            directors.map((d) => {
+                                return <Input key={d.key} onRemove={handleRemoveDirector(d.key)} label={d.value}/>
+                            })
+                        }
                     </div>
                     <div className="flex flex-col gap-[4px]">
                         <p className="text-[#201e1b] text-[14px] font-bold">Writers</p>
-                        <Input/>
-                        <Input/>
-                        <Input/>
+                        {
+                            writers.map((w) => {
+                                return <Input key={w.key} onRemove={handleRemoveWriter(w.key)} label={w.value}/>
+                            })
+                        }
                     </div>
                     <div className="flex flex-col gap-[4px]">
                         <p className="text-[#201e1b] text-[14px] font-bold">Stars</p>
-                        <Input/>
-                        <Input/>
-                        <Input/>
+                        {
+                            stars.map((s) => {
+                                return <Input key={s.key} onRemove={handleRemoveDirector(s.key)} label={s.value}/>
+                            })
+                        }
                     </div>
                 </div>
             </div>
@@ -171,64 +178,46 @@ export default function Page() {
                     </div>
                     <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
                         <div className="flex flex-row justify-between gap-[20px]">
-                            <TextInput/>
-                            <DateInput/>
-                            <DurationInput/>
+                            <TextInput label={"Title"} />
+                            <DateInput />
+                            <DurationInput ref={durationRef} hourRef={hourRef} minRef={minRef} visible={showDurationDropdown} toggleVisibility={handleToggleDurationDropdown} onClick={handleUpdateDurationInput}/>
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">
-                            <TextInput label={"IMDB Rating"}/>
-                            <TextInput label={"Genre"}/>
-                            <TextInput label={"Popularity"}/>
+                            <TextInput label={"IMDB Rating"} />
+                            <TextInput label={"Genre"} />
+                            <TextInput label={"Popularity"} />
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">
-                            <MultiTextInput label={"Director"}/>
-                            <MultiTextInput label={"Writer"}/>
-                            <MultiTextInput label={"Star"}/>
+                            <MultiTextInput label={"Director"} onAdd={handleAddDirector} ref={directorRef} />
+                            <MultiTextInput label={"Writer"} onAdd={handleAddDirector} ref={writersRef} />
+                            <MultiTextInput label={"Star"} onAdd={handleAddDirector} ref={starsRef} />
+                        </div>
+                        <TextField label={"Summary"}/>
+                        <div className="flex justify-end">
+                            <Button variant={"dark"} label={"Submit"}/>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
-                    <div className="px-[20px] pt-[12px] pb-[8px]">
+                    <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
                         <p className="text-[20px] font-bold">Portrait</p>
+                        <LeftIconButton variant="dark" onClick={handleUploadMoviePortrait} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                     </div>
-                    <FileInput/>
+                    <FileInput />
                 </div>
                 <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
-                    <div className="px-[20px] pt-[12px] pb-[8px]">
+                    <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
                         <p className="text-[20px] font-bold">Banner</p>
+                        <LeftIconButton variant="dark" onClick={handleUploadMovieBanner} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                     </div>
-                    <FileInput/>
+                    <FileInput />
                 </div>
             </div>
-        
+
         </div>
-        
+
     )
-    // return (<div className="flex flex-col gap-4 grow">
-    //     <div className="flex flex-col gap-3 bg-rprimary py-10 px-6 rounded-[24]">
-    //         <p className="font-bold text-[20px]">Details</p>
-    //         <FormField label="Title" type={"text"} ref={titleRef}/>
-    //         <div className="flex flex-row gap-2 items-center justify-between w-1/2">
-    //             <FormField label="Release date" type={"date"} ref={releaseDateRef}/>
-    //             <DurationField hourRef={hourRef} minRef={minRef}/>
-    //         </div>
-            
-    //         <FormField label="IMDB rating" type={"text"} ref={ratingRef}/>
-    //         <FormField label="Genre" type={"text"} ref={genreRef}/>
-    //         <FormField label="Popularity" type={"text"} ref={popularityRef}/>
-    //         <MultiFormField label="Director" type={"text"} ref={directorRef} onInput={handleAddDirector} onRemove={handleRemoveDirector} data={directors}/>
-    //         <MultiFormField label="Writer" type={"text"} ref={writersRef} onInput={handleAddWriter} onRemove={handleRemoveWriter} data={writers}/>
-    //         <MultiFormField label="Star" type={"text"} ref={starsRef} onInput={handleAddStar} onRemove={handleRemoveStar} data={stars}/>
-    //         <TextField label="Summary" type={"text"} ref={summaryRef}/>
-    //         <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handlePostMovieDetails}>Submit</button>
-    //     </div>
-    //     <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
-    //         <p className="font-bold text-[20px]">Pictures</p>
-    //         <FormField label="Portrait" type={"file"} ref={portraitRef} disabled={false}/>
-    //         <FormField label="Banner" type={"file"} ref={bannerRef} disabled={!id}/>
-    //         <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handleUploadMoviePortrait}>Submit</button>
-    //     </div>
-    // </div>)
+   
 }
 
 

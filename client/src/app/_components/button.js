@@ -1,6 +1,14 @@
-export default function Button({ label, className }) {
-
-    return (<div className={`flex items-center justify-center gap-[4px] border-[1px] bg-[#f9f9f9] border-[#949088] px-[12px] py-[4px] ${className}`}>
-        <p className="text-[14px] font-bold">{label}</p>
+export default function Button({ label, className, onClick, variant}) {
+    
+    return (<div onClick={onClick} className={`cursor-pointer flex items-center justify-center gap-[4px] border-[1px] px-[12px] py-[4px] ${className} 
+    ${variant ? 
+        variant === 'dark' ?
+        'border-[#262420] bg-[#262420]' :
+        'border-[#949088] bg-[#f9f9f9]' :
+        'border-[#949088] bg-[#f9f9f9]'
+    }`}>
+        <p className={`text-[14px] font-bold ${
+            variant && variant === 'dark' && 'text-white'
+        }`}>{label}</p>
     </div>)
 }

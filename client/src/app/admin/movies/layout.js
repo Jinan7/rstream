@@ -8,7 +8,7 @@ export default function AdminLayout({ children }) {
     const handleToggleSideBar = () => setShowSideBar(!showSideBar)
     return (
         <div className="h-full">
-                <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] sticky top-[52px] z-98 bg-[#f9f9f9]">
+                <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] sticky top-[52px] z-98 bg-[#f9f9f9] self-stretch">
                     <div className="mx-[16px] flex items-center">
                         <SideBarToggle visible={showSideBar} onClick={handleToggleSideBar}/>  
                     </div>
@@ -94,7 +94,7 @@ export default function AdminLayout({ children }) {
                         
                     </div>
                     <div className="w-full h-full flex justify-center">
-                        <main className="max-w-[1620px] mx-[48px] w-full mt-[20px]">
+                        <main className="max-w-[1620px] mx-[48px] w-full mt-[20px] mb-[40px]">
                             { children }
                         </main>
                     </div>
