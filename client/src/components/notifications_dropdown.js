@@ -5,7 +5,7 @@ export default function NotificationsDropdown() {
     return (
         <div className="flex flex-col gap-4">
             <DropdownButton label={"Messages"} href={""}>
-                <Mail/>
+                <Mail className="size-[16px]"/>
             </DropdownButton>
         </div>
     )

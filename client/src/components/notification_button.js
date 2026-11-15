@@ -11,6 +11,6 @@ export default function NotificationButton() {
         handleToggleNavDropdown(dispatch, 'notifications')
     }
     return (
-        <NavButton onClick={toggleNavDropdown}><Bell className="mx-[16px]"/></NavButton>
+        <NavButton onClick={toggleNavDropdown}><Bell className="mx-[16px] size-[16px]"/></NavButton>
     )
 }

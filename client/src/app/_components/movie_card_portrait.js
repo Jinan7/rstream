@@ -4,7 +4,7 @@ export default function MovieCardPortrait({ image_url, title, year, className })
 
 
     return (
-        <div className="rounded-[8px] overflow-hidden border-[1px] border-[#e3e1d1]">
+        <div className="rounded-[8px] overflow-hidden border-b-[2px] border-[1px] border-[#e3e1d1]">
             <div className={`relative ${className} bg-origin-border bg-cover overflow-hidden`}
             style={{
                 "background": `url(${image_url}) center/cover no-repeat`,

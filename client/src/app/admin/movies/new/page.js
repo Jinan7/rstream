@@ -9,6 +9,8 @@ import TextField from "./_components/text_field";
 import { postMovieDetails } from "./_lib/api";
 import { addFormInput, removeFormInput, useDirectorsReducer, useMultiFormReducer } from "./_lib/multiFormReducer";
 import { putFile, uploadFileMultipart } from "./_lib/put";
+import Button from "@/app/_components/button";
+import { X } from "lucide-react";
 
 const FIVE_GIGABYTES = 5 * 1024 * 1024;
 export default function Page() {
@@ -126,31 +128,160 @@ export default function Page() {
     const handleUploadMovieBanner = () => {
          
     }
-    return (<div className="flex flex-col gap-4 grow">
-        <div className="flex flex-col gap-3 bg-rprimary py-10 px-6 rounded-[24]">
-            <p className="font-bold text-[20px]">Details</p>
-            <FormField label="Title" type={"text"} ref={titleRef}/>
-            <div className="flex flex-row gap-2 items-center justify-between w-1/2">
-                <FormField label="Release date" type={"date"} ref={releaseDateRef}/>
-                <DurationField hourRef={hourRef} minRef={minRef}/>
+
+    return (
+        <div className="flex gap-[20px]">
+            <div className="bg-white border-rborder border-[1px] rounded-[2px]">
+                <div className="px-[20px] pt-[12px] pb-[8px]">
+                    <p className="text-[20px] font-bold invisible">Details</p>
+                </div>
+                <div className="flex flex-col gap-[20px] px-[20px] pt-[4px] pb-[20px]">
+                    <div className="flex flex-col gap-[4px]">
+                        <p className="text-[#201e1b] text-[14px] font-bold">Directors</p>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Quentin Tarantino</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Guy Ritchie</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Christopher Nolan</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-[4px]">
+                        <p className="text-[#201e1b] text-[14px] font-bold">Writers</p>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Quentin Tarantino</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Guy Ritchie</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Christopher Nolan</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-[4px]">
+                        <p className="text-[#201e1b] text-[14px] font-bold">Stars</p>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Tom Hanks</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Brad Pitt</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                        <div className="flex w-[200px] items-center justify-between">
+                            <p className="text-[#201e1b] text-[14px] font-normal">Chris Pratt</p>
+                            <X className="size-[16px]"/>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
+                <div className="px-[20px] pt-[12px] pb-[8px]">
+                    <p className="text-[20px] font-bold">Details</p>
+                </div>
+                <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
+                    <div className="flex flex-row justify-between gap-[20px]">
+                        <div className=" flex flex-col gap-[4px] basis-1/1">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Title</label>
+                            <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px]"></input>
+                        </div>
+                        <div className=" flex flex-col gap-[4px] basis-1/1">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Release Date</label>
+                            <input type="date" className="border-[#949088] h-[40px] rounded-[4px] border-[1px]"></input>
+                        </div>
+                        <div className=" flex flex-col gap-[4px] basis-1/1 relative">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Duration</label>
+                            <input type="button" className="border-[#949088] h-[40px] rounded-[4px] border-[1px]">
+                                
+                            </input>
+                            <div className="absolute top-full bg-white border-rborder border-[1px] rounded-[2px] grow p-[20px] flex flex-col gap-[20px]">
+                                <div className="flex flex-col gap-[4px]">
+                                    <label className="text-[#201e1b] text-[14px] font-bold">HH</label>
+                                    <input type="number" className="border-[#949088] h-[40px] rounded-[4px] border-[1px] px-[10px]"/>
+                                </div>
+                                <div className="flex flex-col gap-[4px]">
+                                    <label className="text-[#201e1b] text-[14px] font-bold">MM</label>
+                                    <input type="number" className="border-[#949088] h-[40px] rounded-[4px] border-[1px] px-[10px]"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-row justify-between gap-[20px]">
+                        <div className=" flex flex-col gap-[4px] grow">
+                            <label className="text-[#201e1b] text-[14px] font-bold">IMDB Rating</label>
+                            <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px]"></input>
+                        </div>
+                        <div className=" flex flex-col gap-[4px] grow">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Genre</label>
+                            <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px]"></input>
+                        </div>
+                        <div className=" flex flex-col gap-[4px] grow">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Popularity</label>
+                            <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px]"></input>
+                        </div>
+                    </div>
+                    <div className="flex flex-row justify-between gap-[20px]">
+                        <div className=" flex flex-col gap-[4px] grow">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Director</label>
+                            <div className="flex gap-[12px]">
+                                <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px] grow"></input>
+                                <Button label={"Add"} className="rounded-[4px]"/>
+                            </div>
+                            
+                        </div>
+                        <div className=" flex flex-col gap-[4px] grow">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Writer</label>
+                            <div className="flex gap-[12px]">
+                                <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px] grow"></input>
+                                <Button label={"Add"} className="rounded-[4px]"/>
+                            </div>
+                        </div>
+                        <div className=" flex flex-col gap-[4px] grow">
+                            <label className="text-[#201e1b] text-[14px] font-bold">Star</label>
+                            <div className="flex gap-[12px]">
+                                <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px] grow"></input>
+                                <Button label={"Add"} className="rounded-[4px]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    )
+    // return (<div className="flex flex-col gap-4 grow">
+    //     <div className="flex flex-col gap-3 bg-rprimary py-10 px-6 rounded-[24]">
+    //         <p className="font-bold text-[20px]">Details</p>
+    //         <FormField label="Title" type={"text"} ref={titleRef}/>
+    //         <div className="flex flex-row gap-2 items-center justify-between w-1/2">
+    //             <FormField label="Release date" type={"date"} ref={releaseDateRef}/>
+    //             <DurationField hourRef={hourRef} minRef={minRef}/>
+    //         </div>
             
-            <FormField label="IMDB rating" type={"text"} ref={ratingRef}/>
-            <FormField label="Genre" type={"text"} ref={genreRef}/>
-            <FormField label="Popularity" type={"text"} ref={popularityRef}/>
-            <MultiFormField label="Director" type={"text"} ref={directorRef} onInput={handleAddDirector} onRemove={handleRemoveDirector} data={directors}/>
-            <MultiFormField label="Writer" type={"text"} ref={writersRef} onInput={handleAddWriter} onRemove={handleRemoveWriter} data={writers}/>
-            <MultiFormField label="Star" type={"text"} ref={starsRef} onInput={handleAddStar} onRemove={handleRemoveStar} data={stars}/>
-            <TextField label="Summary" type={"text"} ref={summaryRef}/>
-            <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handlePostMovieDetails}>Submit</button>
-        </div>
-        <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
-            <p className="font-bold text-[20px]">Pictures</p>
-            <FormField label="Portrait" type={"file"} ref={portraitRef} disabled={false}/>
-            <FormField label="Banner" type={"file"} ref={bannerRef} disabled={!id}/>
-            <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handleUploadMoviePortrait}>Submit</button>
-        </div>
-    </div>)
+    //         <FormField label="IMDB rating" type={"text"} ref={ratingRef}/>
+    //         <FormField label="Genre" type={"text"} ref={genreRef}/>
+    //         <FormField label="Popularity" type={"text"} ref={popularityRef}/>
+    //         <MultiFormField label="Director" type={"text"} ref={directorRef} onInput={handleAddDirector} onRemove={handleRemoveDirector} data={directors}/>
+    //         <MultiFormField label="Writer" type={"text"} ref={writersRef} onInput={handleAddWriter} onRemove={handleRemoveWriter} data={writers}/>
+    //         <MultiFormField label="Star" type={"text"} ref={starsRef} onInput={handleAddStar} onRemove={handleRemoveStar} data={stars}/>
+    //         <TextField label="Summary" type={"text"} ref={summaryRef}/>
+    //         <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handlePostMovieDetails}>Submit</button>
+    //     </div>
+    //     <div className="flex flex-col gap-3 bg-rprimary py-4 px-4 rounded-md">
+    //         <p className="font-bold text-[20px]">Pictures</p>
+    //         <FormField label="Portrait" type={"file"} ref={portraitRef} disabled={false}/>
+    //         <FormField label="Banner" type={"file"} ref={bannerRef} disabled={!id}/>
+    //         <button className="bg-rsurface text-white rounded-sm px-3 font-bold" onClick={handleUploadMoviePortrait}>Submit</button>
+    //     </div>
+    // </div>)
 }
 
 

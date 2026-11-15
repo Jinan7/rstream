@@ -6,7 +6,7 @@ export default function MovieCard({ data, className }) {
     let { image_url, title, year } = data;
 
     return (
-        <div className="rounded-[8px] overflow-hidden border-[1px] border-[#e3e1d1]">
+        <div className="rounded-[8px] overflow-hidden border-[1px] border-rborder">
             <div className={`relative ${className} bg-origin-border bg-cover overflow-hidden`}
             style={{
                 "background": `url(${image_url}) center/cover no-repeat`,

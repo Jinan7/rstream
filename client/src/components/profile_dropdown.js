@@ -7,14 +7,14 @@ export default function ProfileDropdown() {
     return (
         <div className="flex flex-col gap-4">
             <DropdownButton label={"Profile"} href={""}>
-                <UserRound/>
+                <UserRound className="size-[16px]"/>
             </DropdownButton>
             <DropdownButton label={"Sign Out"} href={""}>
-                <LogOut/>
+                <LogOut className="size-[16px]"/>
             </DropdownButton>
-            <Separator className={"bg-red-400"}/>
+            <Separator className="bg-rborder h-[2px]"/>
             <DropdownButton label={"Admin Console"} href={"/admin/movies"}>
-                <Key/>
+                <Key className="size-[16px]"/>
             </DropdownButton>
         </div>
     )

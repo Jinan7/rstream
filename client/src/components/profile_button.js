@@ -11,6 +11,6 @@ export default function ProfileButton() {
         handleToggleNavDropdown(dispatch, 'profile')
     }
     return (
-        <NavButton onClick={toggleNavDropDown}><UserRound className="mx-[16px]"/></NavButton>
+        <NavButton onClick={toggleNavDropDown}><UserRound className="mx-[16px] size-[16px]"/></NavButton>
     )
 }

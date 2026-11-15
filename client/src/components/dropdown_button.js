@@ -7,7 +7,7 @@ export default function DropdownButton({children, label, href}) {
 
     let hideNavDropdown = () => dispatch({type:'hide'})
     return (
-    <Link className="flex flex-row gap-2 items-end" href={href} onClick={hideNavDropdown}>
+    <Link className="flex flex-row gap-2 items-center" href={href} onClick={hideNavDropdown}>
         {children}
         <p className="font-bold text-[14px]">{label}</p>
     </Link>)
