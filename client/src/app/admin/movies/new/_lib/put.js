@@ -2,23 +2,29 @@ import { completePosterMultipartUpload, completePutPoster, createPosterMultipart
 
 const CHUNK_SIZE = 5 * 1024 * 1024;
 
-export const putFile = async (id, file, aspect) => {
+export const putFile = async (id, file, aspect, ref, progress, setProgress, setRate) => {
 
     console.log("uploading file")
     let data = await getPosterPresignedUrl(`${id}/${file.name}`)
 
     console.log(data)
-    let response = await putPoster(data.presignedUrl, file)
+    let response = await putPoster(data.presignedUrl, file, ref, progress, setProgress, setRate, file.size)
 
     console.log(response)
-    let response2 = await completePutPoster(`${id}/${file.name}`, {
-        aspect: aspect
-    })
+    try {
+        await completePutPoster(`${id}/${file.name}`, {
+            aspect: aspect
+        })
+    } catch (e) {
 
-    console.log(response2)
+    } finally {
+        ref.current = 0
+        setTimeout(() => setProgress(0), 1000)
+    }
+    
 }
 
-export const uploadFileMultipart = async (id, file, aspect) => {
+export const uploadFileMultipart = async (id, file, aspect, ref, progress, setProgress, setRate) => {
     
     let stream = file.stream();
     let reader = stream.getReader({ mode: "byob" })
@@ -48,7 +54,7 @@ export const uploadFileMultipart = async (id, file, aspect) => {
         let { done, value } = await reader.read(new Uint8Array(buffer, offset, buffer.byteLength - offset))
         if (done) {
             buffer = value.buffer
-            let response = await putPart(presignedUrl.presignedUrl, new Uint8Array(buffer))
+            let response = await putPart(presignedUrl.presignedUrl, new Uint8Array(buffer), ref, progress, setProgress, setRate, file.size)
             let etag = response.headers.etag;
             parts.push({ partNumber: partNumber, etag: etag })
             
@@ -61,7 +67,7 @@ export const uploadFileMultipart = async (id, file, aspect) => {
         bytesRead += value.byteLength
 
         if (offset >= buffer.byteLength) {
-            let response = await putPart(presignedUrl.presignedUrl, new Uint8Array(buffer))
+            let response = await putPart(presignedUrl.presignedUrl, new Uint8Array(buffer), ref, progress, setProgress, setRate, file.size)
             let etag = response.headers.etag;
             parts.push({ partNumber: partNumber, etag: etag })
             partNumber += 1
@@ -76,13 +82,22 @@ export const uploadFileMultipart = async (id, file, aspect) => {
         }
     }
 
-    let response = await completePosterMultipartUpload(key, {
-            uploadId: uploadId.uploadId,
-            parts: parts
-        },
-        {
-            aspect: aspect
-        }
-    )
+    try {
+        await completePosterMultipartUpload(key, 
+            {
+                uploadId: uploadId.uploadId,
+                parts: parts
+            },
+            {
+                aspect: aspect
+            }   
+        )  
+        setProgress(100)
+    } catch (e) {
+
+    } finally {
+        ref.current = 0
+        setTimeout(() => setProgress(0), 1000)
+    }
     
 }

@@ -16,6 +16,7 @@ import DurationInput from "./_components/duration_input";
 import Input from "./_components/input";
 import LeftIconButton from "@/app/_components/left_icon_button";
 import TextField from "./_components/text_field";
+import prettyBytes from 'pretty-bytes'
 
 const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Page() {
@@ -33,12 +34,36 @@ export default function Page() {
     let writersRef = useRef(null)
     let starsRef = useRef(null)
     let summaryRef = useRef(null)
+    let [portrait, setPortrait] = useState("No file selected")
+    let [banner, setBanner] = useState("No file selected")
     let portraitRef = useRef(null)
+    let portraitProgressRef = useRef(0)
+    let [portraitProgress, setPortraitProgress] = useState("0")
     let bannerRef = useRef(null)
+    let bannerProgressRef = useRef(0)
+    let [bannerProgress, setBannerProgress] = useState("0")
     let [directors, directorsDispatch] = useMultiFormReducer([])
     let [writers, writersDispatch] = useMultiFormReducer([])
     let [stars, starsDispatch] = useMultiFormReducer([])
     let [showDurationDropdown, setShowDurationDropdown] = useState(false)
+    let [portraitSize, setPortraitSize] = useState("0 Kb")
+    let [bannerSize, setBannerSize] = useState("0 Kb")
+    let [portraitRate, setPortraitRate] = useState("0 k/s")
+    let [bannerRate, setBannerRate] = useState("0 k/s")
+
+    const handlePortraitChange = () => {
+        let file = portraitRef.current.files[0]
+        if (file) {
+            setPortrait(file.name)
+        }
+    }
+
+    const handleBannerChange = () => {
+        let file = bannerRef.current.files[0]
+        if (file) {
+            setBanner(file.name)
+        }
+    }
 
     const handleToggleDurationDropdown = () => setShowDurationDropdown(!showDurationDropdown)
     const handleUpdateDurationInput = () => {
@@ -114,28 +139,48 @@ export default function Page() {
         }
     }
 
-    const handleUploadMoviePortrait = async () => {
-        let file = portraitRef.current.files[0];
+    const handleFormatSize = (size, setSize) => {
+        setSize(prettyBytes(size))
+    }
 
-        if (file && id) {
+    const handleUploadMoviePortrait = ( ref, progress, setProgress, setRate, setSize ) => {
 
-            if (file.size < FIVE_MEGABYTES) {
-                console.log("uploading small file")
-                await putFile(id, file, 'portrait')
+        return async () => {
+            let file = portraitRef.current.files[0];
+
+            if (file && id) {
+                handleFormatSize(file.size, setSize)
+                if (file.size < FIVE_MEGABYTES) {
+                    await putFile(id, file, 'portrait', ref, progress, setProgress, setRate)
+                } else {
+                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress,setRate)
+                }
+
             } else {
-                console.log("uploading large file")
-                await uploadFileMultipart(id, file, 'portrait')
+
             }
-
-        } else {
-
         }
+        
     }
 
 
 
-    const handleUploadMovieBanner = () => {
+    const handleUploadMovieBanner = ( ref, progress, setProgress, setRate, setSize ) => {
+        return async () => {
+            let file = bannerRef.current.files[0];
 
+            if (file && id) {
+                handleFormatSize(file.size, setSize)
+                if (file.size < FIVE_MEGABYTES) {
+                    await putFile(id, file, 'banner', ref, progress, setProgress, setRate )
+                } else {
+                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress, setRate )
+                }
+
+            } else {
+
+            }
+        }
     }
 
     return (
@@ -165,7 +210,7 @@ export default function Page() {
                         <p className="text-[#201e1b] text-[14px] font-bold">Stars</p>
                         {
                             stars.map((s) => {
-                                return <Input key={s.key} onRemove={handleRemoveDirector(s.key)} label={s.value}/>
+                                return <Input key={s.key} onRemove={handleRemoveStar(s.key)} label={s.value}/>
                             })
                         }
                     </div>
@@ -178,39 +223,39 @@ export default function Page() {
                     </div>
                     <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
                         <div className="flex flex-row justify-between gap-[20px]">
-                            <TextInput label={"Title"} />
-                            <DateInput />
+                            <TextInput label={"Title"} ref={titleRef}/>
+                            <DateInput ref={releaseDateRef}/>
                             <DurationInput ref={durationRef} hourRef={hourRef} minRef={minRef} visible={showDurationDropdown} toggleVisibility={handleToggleDurationDropdown} onClick={handleUpdateDurationInput}/>
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">
-                            <TextInput label={"IMDB Rating"} />
-                            <TextInput label={"Genre"} />
-                            <TextInput label={"Popularity"} />
+                            <TextInput label={"IMDB Rating"} ref={ratingRef}/>
+                            <TextInput label={"Genre"} ref={genreRef}/>
+                            <TextInput label={"Popularity"} ref={popularityRef}/>
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">
                             <MultiTextInput label={"Director"} onAdd={handleAddDirector} ref={directorRef} />
-                            <MultiTextInput label={"Writer"} onAdd={handleAddDirector} ref={writersRef} />
-                            <MultiTextInput label={"Star"} onAdd={handleAddDirector} ref={starsRef} />
+                            <MultiTextInput label={"Writer"} onAdd={handleAddWriter} ref={writersRef} />
+                            <MultiTextInput label={"Star"} onAdd={handleAddStar} ref={starsRef} />
                         </div>
-                        <TextField label={"Summary"}/>
+                        <TextField label={"Summary"} ref={summaryRef}/>
                         <div className="flex justify-end">
-                            <Button variant={"dark"} label={"Submit"}/>
+                            <Button variant={"dark"} label={"Submit"} onClick={handlePostMovieDetails}/>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
                     <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
                         <p className="text-[20px] font-bold">Portrait</p>
-                        <LeftIconButton variant="dark" onClick={handleUploadMoviePortrait} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
+                        <LeftIconButton variant="dark" onClick={handleUploadMoviePortrait(portraitProgressRef, portraitProgress, setPortraitProgress, setPortraitRate, setPortraitSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                     </div>
-                    <FileInput />
+                    <FileInput id="portrait" label={portrait} ref={portraitRef} progress={portraitProgress} size={portraitSize} rate={portraitRate} onChange={handlePortraitChange}/>
                 </div>
                 <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
                     <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
                         <p className="text-[20px] font-bold">Banner</p>
-                        <LeftIconButton variant="dark" onClick={handleUploadMovieBanner} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
+                        <LeftIconButton variant="dark" onClick={handleUploadMovieBanner(bannerProgressRef, bannerProgress, setBannerProgress, setBannerRate, setBannerSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                     </div>
-                    <FileInput />
+                    <FileInput id="banner" label={banner} ref={bannerRef} progress={bannerProgress} size={bannerSize} rate={bannerRate} onChange={handleBannerChange}/>
                 </div>
             </div>
 
