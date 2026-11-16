@@ -7,7 +7,7 @@ export default function FileInput({ id, label, ref, progress, size, rate, onChan
 
     return (
         <div className="flex flex-col px-[20px] pb-[20px] pt-[4px]">
-            <label for={id} className="flex flex-row gap-[12px]">
+            <label htmlFor={id} className="flex flex-row gap-[12px]">
                 <IconButton className="size-[70px]">
                     <Image/>
                 </IconButton>

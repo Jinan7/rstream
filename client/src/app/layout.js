@@ -26,9 +26,9 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex flex-col h-screen min-h-screen">   
+      <body className="h-full min-h-screen">   
         <ContextProviderWrapper>
-            <div className="relative h-full">
+            <div className="relative">
                 <SideBarProvider>
                     <NavBar/>
                 </SideBarProvider>

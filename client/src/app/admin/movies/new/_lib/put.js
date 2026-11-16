@@ -15,6 +15,7 @@ export const putFile = async (id, file, aspect, ref, progress, setProgress, setR
         await completePutPoster(`${id}/${file.name}`, {
             aspect: aspect
         })
+        setProgress(100)
     } catch (e) {
 
     } finally {

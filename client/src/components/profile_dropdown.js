@@ -12,7 +12,7 @@ export default function ProfileDropdown() {
             <DropdownButton label={"Sign Out"} href={""}>
                 <LogOut className="size-[16px]"/>
             </DropdownButton>
-            <Separator className="bg-rborder h-[2px]"/>
+            <Separator className="bg-rborder h-[1px]"/>
             <DropdownButton label={"Admin Console"} href={"/admin/movies"}>
                 <Key className="size-[16px]"/>
             </DropdownButton>
