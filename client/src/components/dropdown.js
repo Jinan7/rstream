@@ -1,7 +1,7 @@
 'use client'
 import { LogOut, UserRound } from "lucide-react";
 import DropdownButton from "./dropdown_button";
-import { useNavDropdownState } from "../app/_context/navbar_context";
+import { useNavDropdownState } from "../app/(with_nav)/_context/navbar_context";
 import ProfileDropdown from "./profile_dropdown";
 import NotificationsDropdown from "./notifications_dropdown";
 

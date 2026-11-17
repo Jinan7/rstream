@@ -1,7 +1,7 @@
 'use client'
 import { SearchIcon } from "lucide-react"
 import Dropdown from "./dropdown"
-import NavBarContextProvider, { useShowNavDropdown } from "../app/_context/navbar_context"
+import NavBarContextProvider, { useShowNavDropdown } from "../app/(with_nav)/_context/navbar_context"
 import Link from "next/link"
 import NavOption from "./nav_option"
 import ProfileButton from "./profile_button"

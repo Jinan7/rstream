@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ContextProviderWrapper from "./context_provider_wrapper";
-import SideBarProvider from "./_context/sidebar_context";
+import SideBarProvider from "./(with_nav)/_context/sidebar_context";
 import NavBar from "@/components/navbar";
 
 const geistSans = Geist({
@@ -26,15 +26,8 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="h-full min-h-screen">   
-        <ContextProviderWrapper>
-            <div className="relative">
-                <SideBarProvider>
-                    <NavBar/>
-                </SideBarProvider>
-                { children }
-            </div>
-        </ContextProviderWrapper>   
+      <body className="min-h-screen h-full">   
+        { children } 
       </body>
     </html>
   );

@@ -6,7 +6,7 @@ use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middlew
 use aws_sdk_s3::config::StalledStreamProtectionConfig;
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}}, s3};
+use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}, signup}, s3};
 
 pub struct Application {
     pub port: u16,
@@ -77,6 +77,7 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket:
                 .route("/health_check", web::get().to(health_check))
                 .service(
                     web::scope("/api/v1")
+                        .route("/signup", web::post().to(signup::post))
                         .route("/genres", web::get().to(genres::get))
                         .route("/movies", web::post().to(movies::post))
                         .route("/movies/posters/multipart/{id}/{key}", web::get().to(create_multipart))
