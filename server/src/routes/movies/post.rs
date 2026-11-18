@@ -7,6 +7,7 @@ use crate::errors::internal_server_error;
 
 #[derive(serde::Deserialize, Debug)]
 pub struct Movie {
+    pub id: Option<uuid::Uuid>,
     pub title: String,
     #[serde(rename = "releaseDate")]
     pub release_date: NaiveDate,
@@ -18,8 +19,9 @@ pub struct Movie {
     pub directors: Vec<String>,
     pub writers: Vec<String>,
     pub stars: Vec<String>,
-    pub summary: String
-
+    pub summary: String,
+    pub portrait_url: Option<String>,
+    pub banner_url: Option<String>
 }
 
 #[derive(Serialize)]

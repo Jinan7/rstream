@@ -5,9 +5,20 @@ import { Dot, Edit, Eye, Plus } from "lucide-react";
 import AddNewMovie from "./_components/add_new_movie_button";
 import Button from "@/app/(with_nav)/_components/button";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getMovies } from "./lib/api";
 
 export default function AdminConsole() {
 
+    let [movies, setMovies] = useState([])
+    useEffect(() => {
+
+        (async () => {
+            let data = await getMovies()
+            console.log(data.movies)
+            setMovies(data.movies)
+        })()
+    }, [])
     const path = usePathname()
     return (
         <div className="h-full">
@@ -17,24 +28,14 @@ export default function AdminConsole() {
                     <Button label={"Add"} variant={'dark'}/>
                 </Link>
             </div>
-            <div className="flex flex-col gap-[20px] px-[20px]">         
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
-                <MovieCard/>
+            <div className="flex flex-col gap-[20px] px-[20px]">  
+
+                {
+                    movies.map( (movie) => {
+                        return <MovieCard key={movie.id} movie={movie}/>
+                    })
+                }       
+                
             </div> 
         </div>
         

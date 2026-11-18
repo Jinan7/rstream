@@ -80,6 +80,7 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket:
                         .route("/signup", web::post().to(signup::post))
                         .route("/genres", web::get().to(genres::get))
                         .route("/movies", web::post().to(movies::post))
+                        .route("movies", web::get().to(movies::get))
                         .route("/movies/posters/multipart/{id}/{key}", web::get().to(create_multipart))
                         .route("/movies/posters/multipart/{id}/{key}", web::post().to(upload_part_presigned))
                         .route("/movies/posters/{id}/{key}",web::get().to(get_presigned_url))

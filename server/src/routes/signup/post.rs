@@ -13,7 +13,7 @@ pub struct RequestPayload {
 }
 pub async fn post(
     pool: web::Data<PgPool>,
-    payload: web::Json<RequestPayload>,
+    payload: web::Form<RequestPayload>,
     session: TypedSession
 ) -> Result<HttpResponse, actix_web::Error> {
 
