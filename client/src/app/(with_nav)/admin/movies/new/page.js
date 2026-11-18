@@ -45,6 +45,7 @@ export default function Page() {
     let [directors, directorsDispatch] = useMultiFormReducer([])
     let [writers, writersDispatch] = useMultiFormReducer([])
     let [stars, starsDispatch] = useMultiFormReducer([])
+    let [genres, genresDispatch] = useMultiFormReducer([])
     let [showDurationDropdown, setShowDurationDropdown] = useState(false)
     let [portraitSize, setPortraitSize] = useState("0 Kb")
     let [bannerSize, setBannerSize] = useState("0 Kb")
@@ -87,6 +88,14 @@ export default function Page() {
         addFormInput(writersDispatch, newWriter)
         writersRef.current.value = ""
     }
+    const handleAddGenre = () => {
+        let newGenre = genreRef.current.value
+        addFormInput(genresDispatch, newGenre)
+        genreRef.current.value = ""
+    }
+    const handleRemoveGenre = (key) => {
+        return () => removeFormInput(genresDispatch, key)
+    }
     const handleRemoveWriter = (key) => {
         return () => removeFormInput(writersDispatch, key)
     }
@@ -106,7 +115,7 @@ export default function Page() {
         let mins = minRef.current.value;
         let duration = +hours * 60 + +mins;
         let imdbRating = +ratingRef.current.value;
-        let genre = genreRef.current.value;
+        let genreList = genres.map((d) => d.value)
         let popularity = +popularityRef.current.value;
         let directorsList = directors.map((d) => d.value)
         let writersList = writers.map((w) => w.value)
@@ -118,7 +127,7 @@ export default function Page() {
             releaseDate: releaseDate,
             duration: duration,
             imdbRating: imdbRating,
-            genre: genre,
+            genres: genreList,
             popularity: popularity,
             directors: directorsList,
             writers: writersList,
@@ -191,6 +200,14 @@ export default function Page() {
                 </div>
                 <div className="flex flex-col gap-[20px] px-[20px] pt-[4px] pb-[20px]">
                     <div className="flex flex-col gap-[4px]">
+                        <p className="text-[#201e1b] text-[14px] font-bold">Genres</p>
+                        {
+                            genres.map((d) => {
+                                return <Input key={d.key} onRemove={handleRemoveGenre(d.key)} label={d.value}/>
+                            })
+                        }
+                    </div>
+                    <div className="flex flex-col gap-[4px]">
                         <p className="text-[#201e1b] text-[14px] font-bold">Directors</p>
                         {
                             directors.map((d) => {
@@ -229,7 +246,8 @@ export default function Page() {
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">
                             <TextInput label={"IMDB Rating"} ref={ratingRef}/>
-                            <TextInput label={"Genre"} ref={genreRef}/>
+                            <MultiTextInput label={"Genre"} onAdd={handleAddGenre} ref={genreRef} />
+                            {/* <TextInput label={"Genre"} ref={genreRef}/> */}
                             <TextInput label={"Popularity"} ref={popularityRef}/>
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">

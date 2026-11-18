@@ -5,7 +5,6 @@ CREATE TABLE movies(
     release_date DATE NOT NULL,
     duration INT NOT NULL,
     imdb_rating FLOAT NOT NULL,
-    genre uuid NOT NULL references genres(id),
     popularity INT NOT NULL,
     directors TEXT[] NOT NULL,
     writers TEXT[] NOT NULL,

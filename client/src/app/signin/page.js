@@ -3,20 +3,22 @@ import { useRef } from "react"
 import { signin } from "./lib/api";
 import Button from "../(with_nav)/_components/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
 
+    let router = useRouter()
     let formRef = useRef(null)
     let handleSignIn = async (e) => {
         e.preventDefault()
         let formData = new FormData(formRef.current)
         
-        let name = formData.get("name");
         let email = formData.get("email");
         let password = formData.get("password")
 
         
-        let response = await signup({name:name, email:email, password:password})
+        let response = await signin({email:email, password:password})
+        if (response.status === 200 ) router.replace('/')
     }
     return (
         <div className="h-full "

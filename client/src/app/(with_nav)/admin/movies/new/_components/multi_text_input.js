@@ -3,7 +3,7 @@ import Button from "@/app/(with_nav)/_components/button";
 export default function MultiTextInput({ label, onAdd, ref }) {
 
     return (
-        <div className=" flex flex-col gap-[4px] grow">
+        <div className=" flex flex-col gap-[4px] grow basis-1/1">
             <label className="text-[#201e1b] text-[14px] font-bold">{label}</label>
             <div className="flex gap-[12px]">
                 <input className="border-[#949088] h-[40px] rounded-[4px] border-[1px] grow" ref={ref}></input>
