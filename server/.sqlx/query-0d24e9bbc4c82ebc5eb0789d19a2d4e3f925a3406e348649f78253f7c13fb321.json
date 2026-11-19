@@ -1,0 +1,158 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT \n                movies.id,\n                title,\n                duration,\n                release_date,\n                directors,\n                writers,\n                stars,\n                imdb_rating,\n                popularity,\n                portrait_url,\n                banner_url,\n                summary\n             FROM movies\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "title",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "title"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "duration",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "duration"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "release_date",
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "release_date"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "directors",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "directors"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "writers",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "writers"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "stars",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "stars"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "imdb_rating",
+        "type_info": "Float8",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "imdb_rating"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "popularity",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "popularity"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "portrait_url",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "portrait_url"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "banner_url",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "banner_url"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "summary",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "movies",
+            "name": "summary"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "0d24e9bbc4c82ebc5eb0789d19a2d4e3f925a3406e348649f78253f7c13fb321"
+}

@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO movies (\n            id,\n            title,\n            release_date,\n            duration,\n            imdb_rating,\n            popularity,\n            directors,\n            writers,\n            stars,\n            summary,\n            portrait_url,\n            banner_url\n        )\n        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, '', '')",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Date",
+        "Int4",
+        "Float8",
+        "Int4",
+        "TextArray",
+        "TextArray",
+        "TextArray",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f8649083c7b9c0c306023a942bb484b718a4dc197f9baf3f57f84cda740030e4"
+}

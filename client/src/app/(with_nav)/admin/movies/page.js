@@ -11,12 +11,17 @@ import { getMovies } from "./lib/api";
 export default function AdminConsole() {
 
     let [movies, setMovies] = useState([])
+
     useEffect(() => {
 
         (async () => {
-            let data = await getMovies()
-            console.log(data.movies)
-            setMovies(data.movies)
+            try {
+                let data = await getMovies()
+                setMovies(data.movies)
+            } catch (e) {
+                
+            }  
+            
         })()
     }, [])
     const path = usePathname()

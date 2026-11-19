@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                INSERT INTO movie_genre_relation(\n                    id,\n                    movie_id,\n                    genre_id\n                )\n                VALUES ($1, $2, $3)\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "57d68aa2b8e662e5d1d782cf723a4011c4ce5fdd817d9dc0b48cb15a8bc2c0b0"
+}

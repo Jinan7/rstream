@@ -17,7 +17,6 @@ pub struct Movie {
     pub duration: i32,
     #[serde(rename = "imdbRating")]
     pub imdb_rating: f64,
-    pub genre: String,
     pub popularity: i32,
     pub directors: Vec<String>,
     pub writers: Vec<String>,
@@ -63,7 +62,6 @@ async fn select_all_movies(
                 title,
                 duration,
                 release_date,
-                genres.genre,
                 directors,
                 writers,
                 stars,
@@ -73,8 +71,6 @@ async fn select_all_movies(
                 banner_url,
                 summary
              FROM movies
-            JOIN genres
-            ON movies.genre = genres.id
         "#
     )
     .fetch_all(pool)
@@ -91,7 +87,6 @@ async fn select_all_movies(
                 title: r.title,
                 duration: r.duration,
                 release_date: r.release_date,
-                genre: r.genre,
                 directors: r.directors,
                 writers: r.writers,
                 stars: r.stars,

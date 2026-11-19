@@ -1,5 +1,4 @@
 export default function UploadProgress({ progress, size, rate }) {
-    console.log(`setting new progress ${progress}`)
     return (
         <div className="flex flex-col gap-[4px]">
             <div className="flex items-center gap-[12px] grow">

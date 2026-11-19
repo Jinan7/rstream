@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "rstream",
-  description: "stream movies and seriess",
+  description: "stream movies and series",
 };
 
 
