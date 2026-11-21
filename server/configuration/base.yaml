@@ -13,3 +13,12 @@ s3:
   presigned_expires_in: 900
 cloudfront:
   domain: "d23robfg978lnf.cloudfront.net"
+cors:
+  origins: "*"
+  methods: [GET, POST, OPTIONS]
+  headers: [AUTHORIZATION, ACCEPT, CONTENT-TYPE]
+  expose-headers: [X-REQUEST-ID]
+  credentials: false
+  send-wildcard: true
+  max-age: 3600
+  block-on-origin-mismatch: false

@@ -1,18 +1,21 @@
+use actix_cors::Cors;
+use serde::Deserialize;
 use sqlx::postgres::{PgConnectOptions, PgSslMode};
 
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone, Debug)]
 
 pub struct Settings {
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
+    pub cors: CorsSettings,
     pub redis_uri: String,
     pub s3: S3Settings,
     pub cloudfront: CloudfrontSettings,
 }
 
 
-#[derive(serde::Deserialize, Clone)]
+#[derive(serde::Deserialize, Clone, Debug)]
 pub struct DatabaseSettings {
     pub username: String,
     pub password: String,
@@ -22,22 +25,119 @@ pub struct DatabaseSettings {
     pub require_ssl: bool,
 }
 
-#[derive(serde::Deserialize, Clone)]
+#[derive(serde::Deserialize, Clone, Debug)]
 pub struct ApplicationSettings {
     pub port: u16,
     pub host: String,
     pub hmac_secret: String
 }
 
-#[derive(serde::Deserialize, Clone)]
+#[derive(serde::Deserialize, Clone, Debug)]
 pub struct S3Settings {
     pub bucket: String,
     pub presigned_expires_in: u64,
 }
 
-#[derive(serde::Deserialize, Clone)]
+#[derive(serde::Deserialize, Clone, Debug)]
 pub struct CloudfrontSettings {
     pub domain: String
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(untagged)]
+pub enum OneOrMany {
+    One(String),
+    Many(Vec<String>)
+}
+#[derive(Debug, Clone, Deserialize)]
+pub struct CorsSettings {
+    origins: Option<OneOrMany>,
+    methods: Option<OneOrMany>,
+    headers: Option<OneOrMany>,
+    #[serde(rename = "expose-headers")]
+    expose_headers: Option<OneOrMany>,
+    credentials: bool,
+    #[serde(rename = "send-wildcard")]
+    send_wildcard: bool,
+    max_age: Option<usize>,
+    #[serde(rename = "block-on-origin-mismatch")]
+    block_on_origin_mismatch: bool,
+} 
+
+impl CorsSettings {
+
+    pub fn cors_from_settings(&self) -> Cors {
+
+        let mut cors = Cors::default();
+
+        match self.origins.as_ref() {
+            None => {}
+            Some(OneOrMany::One(origin)) if origin == "*" => {
+                cors = cors.allow_any_origin();
+            }
+            Some(OneOrMany::One(origin)) => {
+                cors = cors.allowed_origin(origin);
+            }
+            Some(OneOrMany::Many(origins)) => {
+                for origin in origins {
+                    cors = cors.allowed_origin(origin);
+                }
+            }
+        }
+
+        match self.methods.as_ref() {
+            None => {}
+            Some(OneOrMany::One(method)) if method == "*" => {
+                cors = cors.allow_any_method();
+            }
+            Some(OneOrMany::One(method)) => {
+                cors = cors.allowed_methods([method.as_str()]);
+            }
+            Some(OneOrMany::Many(methods)) => {
+                cors = cors.allowed_methods(methods.iter().map(String::as_str));
+            }
+        }
+
+        match self.headers.as_ref() {
+            None => {}
+            Some(OneOrMany::One(header)) if header == "*" => {
+                cors = cors.allow_any_header();
+            }
+            Some(OneOrMany::One(header)) => {
+                cors = cors.allowed_header(header.as_str());
+            }
+            Some(OneOrMany::Many(headers)) => {
+                cors = cors.allowed_headers(headers.iter().map(String::as_str));
+            }
+        }
+
+        match self.expose_headers.as_ref() {
+            None => {}
+            Some(OneOrMany::One(header)) if header == "*" => {
+                cors = cors.expose_any_header();
+            }
+            Some(OneOrMany::One(header)) => {
+                cors = cors.expose_headers([header.as_str()]);
+            }
+            Some(OneOrMany::Many(headers)) => {
+                cors = cors.expose_headers(headers.iter().map(String::as_str));
+            }
+        }
+
+        if self.credentials {
+            cors = cors.supports_credentials();
+        }
+
+        if self.send_wildcard {
+            cors = cors.send_wildcard()
+        }
+
+        if let Some(max_age) = self.max_age {
+            cors = cors.max_age(max_age);
+        }
+
+        cors.block_on_origin_mismatch(self.block_on_origin_mismatch)
+    }
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {

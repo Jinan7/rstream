@@ -6,7 +6,7 @@ use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middlew
 use aws_sdk_s3::config::StalledStreamProtectionConfig;
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::Settings, routes::{self, genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}, signin, signup}, s3};
+use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{self, genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}, signin, signup}, s3};
 
 pub struct Application {
     pub port: u16,
@@ -32,7 +32,7 @@ impl Application {
 
         let s3_config = s3::config::config().await;
         let s3_client = aws_sdk_s3::Client::new(&s3_config);
-        let server = run(listener, pool, config.redis_uri, config.s3.bucket, config.s3.presigned_expires_in, s3_client, config.cloudfront.domain).await;
+        let server = run(listener, pool, config.cors, config.redis_uri, config.s3.bucket, config.s3.presigned_expires_in, s3_client, config.cloudfront.domain).await;
 
         
 
@@ -47,7 +47,8 @@ impl Application {
     }
 }
 
-pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket: String, presigned_expires_in: u64, s3_client: aws_sdk_s3::Client, cloudfront_domain_name: String) -> Server {
+pub async fn run(listener: TcpListener, pool: PgPool, cors: CorsSettings, redis_uri: String, bucket: String, presigned_expires_in: u64, s3_client: aws_sdk_s3::Client, cloudfront_domain_name: String) -> Server {
+   
     let s3_client = web::Data::new(s3_client);
     let pool = web::Data::new(pool);
     let bucket = web::Data::new(Bucket(bucket));
@@ -57,14 +58,9 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket:
     let redis_store = RedisSessionStore::new(redis_uri )
         .await
         .expect("Failed to create redis session store");
+
     HttpServer::new(
         move || {
-
-            let cors = Cors::default()
-                .allowed_origin("http://localhost:3000")
-                .allowed_methods(vec!["GET", "POST"])
-                .allowed_headers(vec![header::AUTHORIZATION, header::CONTENT_TYPE])
-                .max_age(3600);
 
             App::new()
                 .wrap(
@@ -73,7 +69,7 @@ pub async fn run(listener: TcpListener, pool: PgPool, redis_uri: String, bucket:
                         session_key.clone(),
                     )
                 )
-                .wrap(cors)
+                .wrap(cors.clone().cors_from_settings())
                 .route("/health_check", web::get().to(health_check))
                 .service(
                     web::scope("/api/v1")
