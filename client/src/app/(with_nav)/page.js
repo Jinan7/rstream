@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Sidebar } from "lucide-react"
 import SideBarToggle from "./_components/sidebar_toggle"
 import { useState } from "react"
+import MovieGenres from "./_components/movie_genres"
 
 export default function Home() {
 
@@ -66,81 +67,8 @@ export default function Home() {
             <div className="mx-[16px] flex items-center">
                 <SideBarToggle visible={showSideBar} onClick={handleToggleSideBar}/>  
             </div>
-            <div className="w-full max-w-full overflow-auto scrollbar-">
-                <div className="flex gap-5 w-full h-full items-center">
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Action</p>
-                    </div> 
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Adventure</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Crime</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Comedy</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Drama</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Documentary</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Fantasy</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Game</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Horror</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Indie</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">K drama</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Thriller</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">War</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Animation</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Anime</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Music</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Lifestyle</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Sci fi</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Family</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Mystery</p>
-                    </div>  
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Sport</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Western</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Short</p>
-                    </div>
-                    <div className="px-[8px] shrink-0">
-                        <p className="font-bold text-[14px]">Romance</p>
-                    </div>
-                </div>
+            <div className="w-full max-w-full overflow-auto scrollbar-none">
+                <MovieGenres/>
             </div>
         </div>
         <div className="flex h-full">

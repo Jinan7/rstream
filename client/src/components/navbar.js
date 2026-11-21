@@ -6,9 +6,31 @@ import Link from "next/link"
 import NavOption from "./nav_option"
 import ProfileButton from "./profile_button"
 import NotificationButton from "./notification_button"
+import { v4 } from "uuid"
+import { useRef, useState } from "react"
 
 export default function NavBar({ children }) {
    
+    let movieId = useRef(v4())
+    let seriesId = useRef(v4())
+    let navOptions = [
+        {
+            id: movieId.current,
+            label: "Movies"
+        },
+        {
+            id: seriesId.current,
+            label: "Series"
+        }
+    ]
+
+    let [selectedNavOption, setSelectedNavOption] = useState(navOptions[0].id)
+    
+    const handleSetSelectedNavOption = (id) => {
+        return () => {
+            setSelectedNavOption(id)
+        }
+    }
     return (
         <NavBarContextProvider>
             <div className="flex justify-start h-[52px] w-full sticky top-0 z-99 bg-[#f9f9f9]">
@@ -24,8 +46,11 @@ export default function NavBar({ children }) {
                     </div>
                 </div>
                 <div className="flex items-center">
-                    <NavOption label={"Movies"}/>
-                    <NavOption label={"Series"}/>
+                    {
+                        navOptions.map((option) => {
+                            return <NavOption id={option.id} key={option.id} label={option.label} onClick={handleSetSelectedNavOption(option.id)} selected={selectedNavOption === option.id}/>
+                        })
+                    }
                 </div>
                 <div className="flex items-center grow justify-end">
                     <NotificationButton/>
