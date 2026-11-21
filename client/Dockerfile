@@ -45,6 +45,8 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_API_BASE_URL='http://localhost:8000/api/v1/'
+# ... before the build step
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry

@@ -1,9 +1,6 @@
 use std::net::TcpListener;
-
-use actix_cors::Cors;
 use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middleware::from_fn, web};
-use aws_sdk_s3::config::StalledStreamProtectionConfig;
 use sqlx::PgPool;
 
 use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{self, genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}, signin, signup}, s3};
