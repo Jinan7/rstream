@@ -14,11 +14,11 @@ s3:
 cloudfront:
   domain: "d23robfg978lnf.cloudfront.net"
 cors:
-  origins: "*"
+  origins: "http://localhost:3000"
   methods: [GET, POST, OPTIONS]
   headers: [AUTHORIZATION, ACCEPT, CONTENT-TYPE]
   expose-headers: [X-REQUEST-ID]
-  credentials: false
+  credentials: true
   send-wildcard: true
   max-age: 3600
   block-on-origin-mismatch: false
