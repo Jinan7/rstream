@@ -1,0 +1,9 @@
+[0;1;32m●[0m postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (]8;;file://jinan/usr/lib/systemd/system/postgresql.service/usr/lib/systemd/system/postgresql.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: [0;1;32mactive (exited)[0m since Mon 2026-11-23 17:23:57 WAT; 5min ago
+    Process: 1759 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 1759 (code=exited, status=0/SUCCESS)
+        CPU: 1ms
+
+Nov 23 17:23:57 jinan systemd[1]: Starting postgresql.service - PostgreSQL RDBMS...
+Nov 23 17:23:57 jinan systemd[1]: Finished postgresql.service - PostgreSQL RDBMS.

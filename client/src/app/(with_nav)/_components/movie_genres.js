@@ -1,14 +1,23 @@
 'use client'
 import { useEffect, useState } from "react"
 import { getGenres } from "../_lib/api"
+import { useRouter } from "next/navigation"
+
 
 export default function MovieGenres() {
-
+    let router = useRouter()
     let [genres, setGenres] = useState([])
     useEffect(() => {
         (async () => {
-            let data = await getGenres()
-            setGenres(data)
+            try {
+                let data = await getGenres()
+                setGenres(data)
+            } catch (e) {
+                if (e.response.status === 403) {
+                    router.replace('/signin')
+                }
+            }
+            
         })()
     }, [])
     return (

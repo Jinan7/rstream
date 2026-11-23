@@ -4,5 +4,6 @@ pub mod movies;
 pub mod signup;
 pub mod signin;
 pub mod signout;
+pub mod auth_proxy;
 
 pub use health_check::*;

@@ -1,6 +1,6 @@
 import MovieSectionCarousel from "./movie_section_carousel"
 
-export default function MovieSection({ label, className, aspect }) {
+export default function MovieSection({ label, className, aspect, type }) {
 
     
     return (
@@ -8,7 +8,7 @@ export default function MovieSection({ label, className, aspect }) {
             <div className="flex flex-row justify-between px-1 border-l-[4px] border-rsurface mb-[4px]">
                 <p className="text-[20px] font-bold">{label}</p>
             </div>
-            <MovieSectionCarousel className={className} aspect={aspect}/>
+            <MovieSectionCarousel type={type} className={className} aspect={aspect}/>
         </div>
     )
 }

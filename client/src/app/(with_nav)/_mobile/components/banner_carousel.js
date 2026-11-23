@@ -5,7 +5,7 @@ import DownloadButton from "../../_components/download_button";
 import Autoplay from "embla-carousel-autoplay"
 import { Dot } from "lucide-react";
 
-export default function BannerCarouselMobile({ children }) {
+export default function BannerCarouselMobile({ children, type}) {
     const banners = [
         {
             id: 1,

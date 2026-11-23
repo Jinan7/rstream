@@ -16,10 +16,12 @@ export default function NavBar({ children }) {
     let navOptions = [
         {
             id: movieId.current,
+            href: '/',
             label: "Movies"
         },
         {
             id: seriesId.current,
+            href: '/series',
             label: "Series"
         }
     ]
@@ -48,7 +50,7 @@ export default function NavBar({ children }) {
                 <div className="flex items-center">
                     {
                         navOptions.map((option) => {
-                            return <NavOption id={option.id} key={option.id} label={option.label} onClick={handleSetSelectedNavOption(option.id)} selected={selectedNavOption === option.id}/>
+                            return <NavOption href={option.href} id={option.id} key={option.id} label={option.label} onClick={handleSetSelectedNavOption(option.id)} selected={selectedNavOption === option.id}/>
                         })
                     }
                 </div>

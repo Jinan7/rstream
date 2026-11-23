@@ -7,7 +7,7 @@ import Banner from "@/app/(with_nav)/_components/banner";
 import LeftIconButton from "@/app/(with_nav)/_components/left_icon_button";
 import RightIconButton from "@/app/(with_nav)/_components/right_icon_button";
 
-export default function BannerCarouselWeb({ children }) {
+export default function BannerCarouselWeb({ children, type }) {
     const banners = [
         {
             id: 1,
@@ -86,7 +86,7 @@ export default function BannerCarouselWeb({ children }) {
                         </p>      
                     </div>
                     <div className="banner-buttons flex flex-row gap-4">
-                        <WatchButton type={"movie"}/>
+                        <WatchButton type={type}/>
                         <DownloadButton/>
                         
                     </div>

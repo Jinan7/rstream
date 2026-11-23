@@ -1,0 +1,100 @@
+'use client'
+import { getGenres } from "../_lib/api"
+import ResponsiveBannerCarousel from "../_responsive/banner_carousel"
+import MovieSection from "../_components/movie_section"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Sidebar } from "lucide-react"
+import SideBarToggle from "../_components/sidebar_toggle"
+import { useState } from "react"
+import MovieGenres from "../_components/movie_genres"
+
+export default function Home() {
+
+  let landscape = "basis-2/3 sm:basis-1/2 md:basis-2/5 lg:basis-1/3 xl:basis-2/7"
+  let portrait = "basis-2/12 sm:basis-2/13 md:basis-2/14 lg:basis-2/15 xl:basis-2/16"
+  let data = [
+    {
+        key: 1,
+        type: "series",
+        section_name: "New",
+        className: landscape,
+        aspect: "aspect-16/9"
+    },
+    {
+        key: 2,
+        type: "series",
+        section_name: "Adventure",
+        className: portrait,
+        aspect: "aspect-9/16"
+    },
+    {
+        key: 3,
+        type: "series",
+        section_name: "Action",
+        className: portrait,
+        aspect: "aspect-9/16"
+    },
+    {
+        key: 4,
+        type: "series",
+        section_name: "Popular",
+        className: landscape,
+        aspect: "aspect-16/9"
+    },
+    {
+        key: 5,
+        type: "series",
+        section_name: "Comedy",
+        className: portrait,
+        aspect: "aspect-9/16"
+    },
+    {
+        key: 6,
+        type: "series",
+        section_name: "Drama",
+        className: portrait,
+        aspect: "aspect-9/16"
+    },
+    {
+        key: 7,
+        type: "series",
+        section_name: "Anime",
+        className: portrait,
+        aspect: "aspect-9/16"
+    },
+  ]
+
+  let [showSideBar, setShowSideBar]  = useState(false)
+  const handleToggleSideBar = () => setShowSideBar(!showSideBar)
+  return (
+    <div className="h-full">
+        <div className="border-[1px] border-y-[#e3e1d1] flex h-[40px] sticky top-[52px] z-98 bg-[#f9f9f9]">
+            <div className="mx-[16px] flex items-center">
+                <SideBarToggle visible={showSideBar} onClick={handleToggleSideBar}/>  
+            </div>
+            <div className="w-full max-w-full overflow-auto scrollbar-none">
+                <MovieGenres/>
+            </div>
+        </div>
+        <div className="flex h-full">
+            <div className={`sidebar w-[280px] self-stretch flex border-r-[#e3e1d1] border-r-[1px] ${showSideBar ? 'visible' : 'collapse'}`}>
+                
+            </div>
+            <div className="w-full h-full flex justify-center">
+                <main className="max-w-[1620px] mx-[48px] w-full mt-[20px]">
+                    <ResponsiveBannerCarousel type={"series"}/>
+                    <div className="flex flex-col mt-[52px] gap-[20px]">
+                
+                        {
+                            data.map(
+                            category => <MovieSection type={category.type} key={category.key} label={category.section_name} className={category.className} aspect={category.aspect}/>
+                            )
+                        }
+                    </div> 
+                </main>
+            </div>
+        </div>
+    </div>
+    
+  )
+}

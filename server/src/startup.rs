@@ -3,7 +3,7 @@ use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middleware::from_fn, web};
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{self, genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}, signin, signout, signup}, s3};
+use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{self, auth_proxy, genres, health_check, movies::{self, posters::{complete_multipart, complete_put, create_multipart, get_presigned_url, upload_part_presigned}}, signin, signout, signup}, s3};
 
 pub struct Application {
     pub port: u16,
@@ -75,6 +75,7 @@ pub async fn run(listener: TcpListener, pool: PgPool, cors: CorsSettings, redis_
                         .service(
                             web::scope("")
                             .wrap(from_fn(authentication_middle_ware))
+                            .route("/auth_proxy", web::get().to(auth_proxy::get))
                             .route("/signout", web::get().to(signout::get))
                             .route("/genres", web::get().to(genres::get))
                             .route("/movies", web::post().to(movies::post))

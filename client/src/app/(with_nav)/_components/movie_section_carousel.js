@@ -2,7 +2,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import MovieCard from "./movie_card";
 import MovieCardPortrait from "./movie_card_portrait";
 
-export default function MovieSectionCarousel({ aspect, className }) {
+export default function MovieSectionCarousel({type, aspect, className }) {
     const movies = [
         {
             id: 1,

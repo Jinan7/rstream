@@ -3,7 +3,6 @@ import { getGenres } from "./_lib/api"
 import PseudoSideBar from "./_components/pseudo_sidebar"
 import ResponsiveBannerCarousel from "./_responsive/banner_carousel"
 import MovieSection from "./_components/movie_section"
-import MovieCategories from "./_components/movie_categories"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sidebar } from "lucide-react"
 import SideBarToggle from "./_components/sidebar_toggle"
@@ -77,9 +76,9 @@ export default function Home() {
             </div>
             <div className="w-full h-full flex justify-center">
                 <main className="max-w-[1620px] mx-[48px] w-full mt-[20px]">
-                    <ResponsiveBannerCarousel/>
+                    <ResponsiveBannerCarousel type={"movie"}/>
                     <div className="flex flex-col mt-[52px] gap-[20px]">
-                        <MovieCategories className={"sm:collapse sm:h-0 mb-4"}/>
+                
                         {
                             data.map(
                             category => <MovieSection key={category.key} label={category.section_name} className={category.className} aspect={category.aspect}/>
