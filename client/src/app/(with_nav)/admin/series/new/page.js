@@ -18,6 +18,7 @@ import TextField from "../../movies/new/_components/text_field";
 import prettyBytes from 'pretty-bytes'
 import { addSeason, useSeasonsReducer } from "../lib/seasonReducer";
 import SeasonButton from "../components/season_button";
+import EpisodeButton from "../components/episode_button";
 
 const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Page() {
@@ -202,105 +203,49 @@ export default function Page() {
     }
 
     return (
-        <div className="flex gap-[20px] ">
-            <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
+        <div className="flex flex-col gap-[20px] grow">
+            <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px]">
                 <div className="px-[20px] pt-[12px] pb-[8px]">
-                    <p className="text-[20px] font-bold invisible">Details</p>
+                    <p className="text-[20px] font-bold">Details</p>
                 </div>
-                <div className="flex flex-col gap-[20px] pt-[4px] pb-[20px]">
-                    <div className="flex flex-col gap-[4px]">
-                        <p className="text-[#201e1b] text-[14px] font-bold px-[20px]">Genres</p>
-                        {
-                            genres.map((d) => {
-                                return <Input key={d.key} onRemove={handleRemoveGenre(d.key)} label={d.value} className={"px-[20px]"}/>
-                            })
-                        }
+                <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
+                    <div className="flex flex-row justify-between gap-[20px]">
+                        <TextInput label={"Title"} ref={titleRef}/>
+                        <DateInput ref={releaseDateRef}/>
+                        <DurationInput ref={durationRef} hourRef={hourRef} minRef={minRef} visible={showDurationDropdown} toggleVisibility={handleToggleDurationDropdown} onClick={handleUpdateDurationInput}/>
                     </div>
-                    <div className="flex flex-col gap-[4px]">
-                        <p className="text-[#201e1b] text-[14px] font-bold px-[20px]">Directors</p>
-                        {
-                            directors.map((d) => {
-                                return <Input key={d.key} onRemove={handleRemoveDirector(d.key)} label={d.value} className={"px-[20px]"}/>
-                            })
-                        }
+                    <div className="flex flex-row justify-between gap-[20px]">
+                        <TextInput label={"IMDB Rating"} ref={ratingRef}/>
+                        <MultiTextInput label={"Genre"} onAdd={handleAddGenre} ref={genreRef} />
+                        {/* <TextInput label={"Genre"} ref={genreRef}/> */}
+                        <TextInput label={"Popularity"} ref={popularityRef}/>
                     </div>
-                    <div className="flex flex-col gap-[4px]">
-                        <p className="text-[#201e1b] text-[14px] font-bold px-[20px]">Writers</p>
-                        {
-                            writers.map((w) => {
-                                return <Input key={w.key} onRemove={handleRemoveWriter(w.key)} label={w.value} className={"px-[20px]"}/>
-                            })
-                        }
+                    <div className="flex flex-row justify-between gap-[20px]">
+                        <MultiTextInput label={"Director"} onAdd={handleAddDirector} ref={directorRef} />
+                        <MultiTextInput label={"Writer"} onAdd={handleAddWriter} ref={writersRef} />
+                        <MultiTextInput label={"Star"} onAdd={handleAddStar} ref={starsRef} />
                     </div>
-                    <div className="flex flex-col gap-[4px]">
-                        <p className="text-[#201e1b] text-[14px] font-bold px-[20px]">Stars</p>
-                        {
-                            stars.map((s) => {
-                                return <Input key={s.key} onRemove={handleRemoveStar(s.key)} label={s.value} className={"px-[20px]"}/>
-                            })
-                        }
-                    </div>
-                    <div className="flex flex-col gap-[12px]">
-                        <div className="flex justify-between items-center px-[20px]">
-                            <p className="text-[#201e1b] text-[14px] font-bold">Seasons</p>
-                            <Button label={"Add"} onClick={handleAddSeason}/>
-                        </div>
-                        <div className="flex flex-col">
-                            {
-                                seasons.map((s) => {
-                                    return <SeasonButton key={s.key} label={`Season ${s.data.index}`}/>
-                                })
-                            }
-                        </div>   
+                    <TextField label={"Summary"} ref={summaryRef}/>
+                    <div className="flex justify-end">
+                        <Button variant={"dark"} label={"Submit"} onClick={handlePostMovieDetails}/>
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col gap-[20px] grow">
-                <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
-                    <div className="px-[20px] pt-[12px] pb-[8px]">
-                        <p className="text-[20px] font-bold">Details</p>
-                    </div>
-                    <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
-                        <div className="flex flex-row justify-between gap-[20px]">
-                            <TextInput label={"Title"} ref={titleRef}/>
-                            <DateInput ref={releaseDateRef}/>
-                            <DurationInput ref={durationRef} hourRef={hourRef} minRef={minRef} visible={showDurationDropdown} toggleVisibility={handleToggleDurationDropdown} onClick={handleUpdateDurationInput}/>
-                        </div>
-                        <div className="flex flex-row justify-between gap-[20px]">
-                            <TextInput label={"IMDB Rating"} ref={ratingRef}/>
-                            <MultiTextInput label={"Genre"} onAdd={handleAddGenre} ref={genreRef} />
-                            {/* <TextInput label={"Genre"} ref={genreRef}/> */}
-                            <TextInput label={"Popularity"} ref={popularityRef}/>
-                        </div>
-                        <div className="flex flex-row justify-between gap-[20px]">
-                            <MultiTextInput label={"Director"} onAdd={handleAddDirector} ref={directorRef} />
-                            <MultiTextInput label={"Writer"} onAdd={handleAddWriter} ref={writersRef} />
-                            <MultiTextInput label={"Star"} onAdd={handleAddStar} ref={starsRef} />
-                        </div>
-                        <TextField label={"Summary"} ref={summaryRef}/>
-                        <div className="flex justify-end">
-                            <Button variant={"dark"} label={"Submit"} onClick={handlePostMovieDetails}/>
-                        </div>
-                    </div>
+            <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px]">
+                <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
+                    <p className="text-[20px] font-bold">Portrait</p>
+                    <LeftIconButton variant="dark" onClick={handleUploadMoviePortrait(portraitProgressRef, portraitProgress, setPortraitProgress, setPortraitRate, setPortraitSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                 </div>
-                <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
-                    <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
-                        <p className="text-[20px] font-bold">Portrait</p>
-                        <LeftIconButton variant="dark" onClick={handleUploadMoviePortrait(portraitProgressRef, portraitProgress, setPortraitProgress, setPortraitRate, setPortraitSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
-                    </div>
-                    <FileInput id="portrait" label={portrait} ref={portraitRef} progress={portraitProgress} size={portraitSize} rate={portraitRate} onChange={handlePortraitChange}/>
-                </div>
-                <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
-                    <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
-                        <p className="text-[20px] font-bold">Banner</p>
-                        <LeftIconButton variant="dark" onClick={handleUploadMovieBanner(bannerProgressRef, bannerProgress, setBannerProgress, setBannerRate, setBannerSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
-                    </div>
-                    <FileInput id="banner" label={banner} ref={bannerRef} progress={bannerProgress} size={bannerSize} rate={bannerRate} onChange={handleBannerChange}/>
-                </div>
+                <FileInput id="portrait" label={portrait} ref={portraitRef} progress={portraitProgress} size={portraitSize} rate={portraitRate} onChange={handlePortraitChange}/>
             </div>
-
+            <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px]">
+                <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
+                    <p className="text-[20px] font-bold">Banner</p>
+                    <LeftIconButton variant="dark" onClick={handleUploadMovieBanner(bannerProgressRef, bannerProgress, setBannerProgress, setBannerRate, setBannerSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
+                </div>
+                <FileInput id="banner" label={banner} ref={bannerRef} progress={bannerProgress} size={bannerSize} rate={bannerRate} onChange={handleBannerChange}/>
+            </div>
         </div>
-
     )
    
 }

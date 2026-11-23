@@ -247,7 +247,6 @@ export default function Page() {
                         <div className="flex flex-row justify-between gap-[20px]">
                             <TextInput label={"IMDB Rating"} ref={ratingRef}/>
                             <MultiTextInput label={"Genre"} onAdd={handleAddGenre} ref={genreRef} />
-                            {/* <TextInput label={"Genre"} ref={genreRef}/> */}
                             <TextInput label={"Popularity"} ref={popularityRef}/>
                         </div>
                         <div className="flex flex-row justify-between gap-[20px]">
