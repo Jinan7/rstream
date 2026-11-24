@@ -14,23 +14,43 @@ export const addEpisode = (dispatch, episode) => {
         data: episode.data,
     })
 }
+
+export const updateSeason = (dispatch, season) => {
+    dispatch({
+        type: "update",
+        data: season
+    })
+}
 export default function seasonsReducer(state, action) {
 
     switch (action.type) {
         case "add": {
-            console.log("adding new season")
+            
             return [...state, {key:v4(), data:action.data}]
+        }
+        case "update": {
+            let newState = state.map((s) => {
+                if (s.key === action.data.key) {
+                    return action.data
+                }
+                return s
+            })
+            
+            return newState
         }
         case "addEpisode": {
             
             let newState = state.map((season) => {
-                if (season.data.index === action.data.seasonIndex) {
+                if (season.key === action.data.seasonId) {
                     return {...season, data:{...season.data, episodes:[...season.data.episodes, {key:v4(), data:action.data}]}}
                 } 
                 return season
             })
            
             return newState
+        }
+        default: {
+            return state
         }
     }
 }

@@ -65,12 +65,12 @@ export const putPart = async (uri, chunk, ref, progress, setProgress, setRate, t
             
         },
         onUploadProgress: (progressEvent) => {
-            console.log(progressEvent)
+           
             let rate = progressEvent.rate ? progressEvent.rate : 0
             setRate(`${prettyBytes(rate)}/s`)
             let incr = Math.trunc((progressEvent.bytes/totalSize) * 100)
             let newProgress = ref.current + incr
-            console.log(newProgress)
+            
             ref.current = newProgress
             setProgress(newProgress)
         }

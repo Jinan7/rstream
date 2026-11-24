@@ -4,13 +4,13 @@ const CHUNK_SIZE = 5 * 1024 * 1024;
 
 export const putFile = async (id, file, aspect, ref, progress, setProgress, setRate) => {
 
-    console.log("uploading file")
+    
     let data = await getPosterPresignedUrl(`${id}/${file.name}`)
 
-    console.log(data)
+   
     let response = await putPoster(data.presignedUrl, file, ref, progress, setProgress, setRate, file.size)
 
-    console.log(response)
+    
     try {
         await completePutPoster(`${id}/${file.name}`, {
             aspect: aspect

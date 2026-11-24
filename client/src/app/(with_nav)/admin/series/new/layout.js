@@ -55,7 +55,7 @@ export default function Layout({ children, episode, season }) {
 
 
     return (
-        <NewSeriesContext value={{ seasonsDispatch }}>
+        <NewSeriesContext value={{ id, setId, activeLink, seasons, seasonsDispatch }}>
             <div className="flex gap-[20px] ">
                 <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
                     <div className="px-[20px] pt-[12px] pb-[8px]">
@@ -139,9 +139,33 @@ export default function Layout({ children, episode, season }) {
    
 }
 
+export const useNewSeriesContext = () => {
+    return useContext(NewSeriesContext)
+}
+
 export const useSeasonsDispatchContext = () => {
     let {seasonsDispatch } = useContext(NewSeriesContext)
     return seasonsDispatch
+}
+
+export const useActiveLink = () => {
+    let {activeLink} = useContext(NewSeriesContext)
+    return activeLink
+}
+
+export const useSeasons = () => {
+    let {seasons} = useContext(NewSeriesContext)
+    return seasons
+}
+
+export const useSeriesId = () => {
+    let {id} = useNewSeriesContext()
+    return id
+}
+
+export const useSetSeriesId = () => {
+    let {setId} = useNewSeriesContext()
+    return setId
 }
 
 

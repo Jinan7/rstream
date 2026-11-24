@@ -15,7 +15,7 @@ const signout = async () => {
 }
 
 const auth_proxy = async (headers) => {
-    console.log(headers.get('cookie'))
+    
     let response = await api.get("/auth_proxy", {
         headers: {
             'cookie': headers.get('cookie')

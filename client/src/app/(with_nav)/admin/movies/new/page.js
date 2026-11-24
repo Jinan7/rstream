@@ -78,7 +78,7 @@ export default function Page() {
         let newDirector = directorRef.current.value
         addFormInput(directorsDispatch, newDirector)
         directorRef.current.value = ""
-        console.log(directors)
+        
     }
     const handleRemoveDirector = (key) => {
         return () => removeFormInput(directorsDispatch, key)

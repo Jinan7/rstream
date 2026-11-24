@@ -1,5 +1,5 @@
 CREATE TABLE movies(
-    id uuid NOT NULL DEFAULT uuidv7(),
+    id uuid NOT NULL,
     PRIMARY KEY (id),
     title TEXT NOT NULL,
     release_date DATE NOT NULL,

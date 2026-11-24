@@ -19,11 +19,14 @@ import prettyBytes from 'pretty-bytes'
 import { addSeason, useSeasonsReducer } from "../lib/seasonReducer";
 import SeasonButton from "../components/season_button";
 import EpisodeButton from "../components/episode_button";
+import { postSeriesDetails } from "./lib/api";
+import { useSeriesId, useSetSeriesId } from "./layout";
 
 const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Page() {
 
-    let [id, setId] = useState(null)
+    let id = useSeriesId()
+    let setId = useSetSeriesId()
     let titleRef = useRef(null)
     let releaseDateRef = useRef(null)
     let hourRef = useRef(null)
@@ -81,7 +84,7 @@ export default function Page() {
         let newDirector = directorRef.current.value
         addFormInput(directorsDispatch, newDirector)
         directorRef.current.value = ""
-        console.log(directors)
+        
     }
     const handleRemoveDirector = (key) => {
         return () => removeFormInput(directorsDispatch, key)
@@ -118,7 +121,7 @@ export default function Page() {
         })
     }
 
-    const handlePostMovieDetails = async () => {
+    const handlePostSeriesDetails = async () => {
         let title = titleRef.current.value;
         let releaseDate = releaseDateRef.current.value;
         let hours = hourRef.current.value;
@@ -146,14 +149,10 @@ export default function Page() {
         }
 
         try {
-            let movieData = await postMovieDetails(data)
-            setId(movieData.id)
+            let response = await postSeriesDetails(data)
+            setId(response.data.id)
         } catch (e) {
-            if (e.response) {
-
-            } else if (e.request) {
-
-            }
+            
 
         }
     }
@@ -227,7 +226,7 @@ export default function Page() {
                     </div>
                     <TextField label={"Summary"} ref={summaryRef}/>
                     <div className="flex justify-end">
-                        <Button variant={"dark"} label={"Submit"} onClick={handlePostMovieDetails}/>
+                        <Button variant={"dark"} label={"Submit"} onClick={handlePostSeriesDetails}/>
                     </div>
                 </div>
             </div>

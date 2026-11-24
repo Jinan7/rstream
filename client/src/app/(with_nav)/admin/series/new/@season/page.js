@@ -16,16 +16,19 @@ import Input from "../../../movies/new/_components/input";
 import LeftIconButton from "@/app/(with_nav)/_components/left_icon_button";
 import TextField from "../../../movies/new/_components/text_field";
 import prettyBytes from 'pretty-bytes'
-import { addEpisode, addSeason, useSeasonsReducer } from "../../lib/seasonReducer";
+import { addEpisode, addSeason, updateSeason, useSeasonsReducer } from "../../lib/seasonReducer";
 import SeasonButton from "../../components/season_button";
 import EpisodeButton from "../../components/episode_button";
-import { useSeasonsDispatchContext } from "../layout";
+import { useActiveLink, useSeasons, useSeasonsDispatchContext } from "../layout";
+import prettyMilliseconds from "pretty-ms";
 
 export default function Season() {
 
-    let [id, setId] = useState(null)
-   
+
     let seasonsDispatch = useSeasonsDispatchContext()
+    let activeLink = useActiveLink()
+    let seasons = useSeasons()
+    let indexRef = useRef(null)
 
 
     const handleAddEpisode = (e) => {
@@ -33,12 +36,29 @@ export default function Season() {
         addEpisode(seasonsDispatch,
             {
                 data: {
-                    seasonIndex: 0,
+                    seasonId: activeLink,
                     index: 1,
                     title: "The Hedge Knight"
                 }
             }
         )
+    }
+
+    const handleUpdateSeasonDetails = () => {
+        let newIndex = indexRef.current.value
+        let season = seasons.find((season) => {
+            return season.key === activeLink
+        })
+
+        let newSeason = {
+            ...season,
+            data: {
+                ...season.data,
+                index: newIndex ?? season.data.index,     
+            }
+        }
+
+        updateSeason(seasonsDispatch,newSeason)
     }
 
     return (
@@ -49,17 +69,17 @@ export default function Season() {
                 </div>
                 <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
                     <div className="flex flex-row justify-between gap-[20px]">
-                        <TextInput label={"Index"} ref={null}/>
+                        <TextInput type="number" label={"Index"} ref={indexRef} />
                     </div>
                     <div className="flex justify-end">
-                        <Button variant={"dark"} label={"Submit"} onClick={null}/>
+                        <Button variant={"dark"} label={"Submit"} onClick={handleUpdateSeasonDetails} />
                     </div>
                 </div>
             </div>
             <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px]">
                 <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
                     <p className="text-[20px] font-bold">Episodes</p>
-                    <Button label={"Add Episode"} onClick={handleAddEpisode}/>
+                    <Button label={"Add Episode"} onClick={handleAddEpisode} />
                 </div>
                 <div className="flex flex-col gap-[20px] px-[20px] pb-[20px] pt-[4px]">
                     <table>
@@ -68,66 +88,78 @@ export default function Season() {
                                 <th className="w-2 border-b-[1px] border-[#e3e1de] pr-[8px]">
                                     <div className="flex flex-row justify-between py-[4px] pl-[4px]">
                                         <p className="invisible text-[14px]">Index</p>
-                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]"/>
+                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]" />
                                     </div>
                                 </th>
                                 <th className=" border-b-[1px] border-[#e3e1de] pr-[8px]">
                                     <div className="flex flex-row justify-between py-[4px] pl-[4px]">
                                         <p className="text-semibold text-[14px]">Index</p>
-                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]"/>
+                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]" />
                                     </div>
                                 </th>
                                 <th className=" border-b-[1px] border-[#e3e1de] pr-[8px]">
                                     <div className="flex flex-row justify-between py-[4px] pl-[4px]">
                                         <p className="text-semibold text-[14px]">Title</p>
-                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]"/>
+                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]" />
                                     </div>
                                 </th>
                                 <th className=" border-b-[1px] border-[#e3e1de]">
                                     <div className="flex flex-row justify-between py-[4px] pl-[4px]">
                                         <p className="text-semibold text-[14px]">Duration</p>
-                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]"/>
+                                        <span className="border-s-[1px] border-[#e3e1de] my-[2px]" />
                                     </div>
                                 </th>
                                 <th className=" border-b-[1px] border-[#e3e1de]">
                                     <div className="flex flex-row justify-between py-[4px]">
-                                          
+
                                     </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className="w-2 border-b-[1px] border-[#e3e1de] pr-[8px]">
-                                    <div className="min-w-[100px] py-[6px] pl-[4px]">
-                                        <p className="text-[14px] underline">Details</p>
-                                    </div>
-                                </td>
-                                <td className="border-b-[1px] border-[#e3e1de] pr-[8px]">
-                                    <div className="min-w-[100px] py-[6px] pl-[4px]">
-                                        <p className="text-[14px]">1</p>
-                                    </div>
-                                </td>
-                                <td className="border-b-[1px] border-[#e3e1de] pr-[8px]">
-                                    <div className="min-w-[100px] py-[6px] pl-[4px]">
-                                        <p className="text-[14px]">The Hedge Knight</p>
-                                    </div>
-                                </td>
-                                <td className="border-b-[1px] border-[#e3e1de]">
-                                    <div className="min-w-[100px] py-[6px] pl-[4px]">
-                                        <p className="text-[14px]">1h 30mins</p>
-                                    </div>
-                                </td>
-                                <td className="border-b-[1px] border-[#e3e1de]">
-                                    <div className="min-w-[100px] py-[6px] pl-[20px]">
-                                        <X className="size-[16px]"/>
-                                    </div>
-                                </td>
-                            </tr>
+                            {
+                                seasons.find((season) => {
+                                    return season.key === activeLink
+                                })                                
+                                ?.data
+                                ?.episodes
+                                ?.map((episode) => {
+                                    console.log(episode)
+                                    return (
+                                    <tr key={episode.key}>
+                                        <td className="w-2 border-b-[1px] border-[#e3e1de] pr-[8px]">
+                                            <div className="min-w-[100px] py-[6px] pl-[4px]">
+                                                <p className="text-[14px] underline">Details</p>
+                                            </div>
+                                        </td>
+                                        <td className="border-b-[1px] border-[#e3e1de] pr-[8px]">
+                                            <div className="min-w-[100px] py-[6px] pl-[4px]">
+                                                <p className="text-[14px]">{episode?.data?.index ?? 0}</p>
+                                            </div>
+                                        </td>
+                                        <td className="border-b-[1px] border-[#e3e1de] pr-[8px]">
+                                            <div className="min-w-[100px] py-[6px] pl-[4px]">
+                                                <p className="text-[14px]">{episode?.data?.title ?? `Episode ${episode?.data?.index ?? "0"}`}</p>
+                                            </div>
+                                        </td>
+                                        <td className="border-b-[1px] border-[#e3e1de]">
+                                            <div className="min-w-[100px] py-[6px] pl-[4px]">
+                                                <p className="text-[14px]">{prettyMilliseconds((episode?.data?.duration ?? 0) * 60 * 1000)}</p>
+                                            </div>
+                                        </td>
+                                        <td className="border-b-[1px] border-[#e3e1de]">
+                                            <div className="min-w-[100px] py-[6px] pl-[20px]">
+                                                <X className="size-[16px]"/>
+                                            </div>
+                                        </td>
+                                    </tr>)
+                                })
+                            }
+
                         </tbody>
                     </table>
                     <div className="flex justify-end">
-                        <Button variant={"dark"} label={"Submit"} onClick={null}/>
+                        <Button variant={"dark"} label={"Submit"} onClick={null} />
                     </div>
                 </div>
             </div>

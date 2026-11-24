@@ -9,7 +9,7 @@ export async function proxy(request) {
         let response = await auth_proxy(request.headers)
        
     } catch (e) {
-        console.log(e.response)
+        
         if (e.response.status === 403) {
             return NextResponse.redirect(new URL('/signin', request.url))
         }     

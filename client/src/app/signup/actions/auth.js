@@ -8,5 +8,5 @@ export default async function signup(formData ) {
 
     let response = await apiSignup({name:name,email:email,password:password})
     
-    console.log(response.headers)
+    
 }

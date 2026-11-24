@@ -18,7 +18,6 @@ pub async fn authentication_middle_ware(
     next: Next<impl MessageBody>
 ) -> Result<ServiceResponse<impl MessageBody>, actix_web::Error> {
 
-    println!("{:?}", req);
     let session = async {
         let (req, payload) = req.parts_mut();
         TypedSession::from_request(req, payload).await
