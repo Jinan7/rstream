@@ -8,20 +8,29 @@ export const addSeason = (dispatch, season) => {
     })
 }
 
+export const addEpisode = (dispatch, episode) => {
+    dispatch({
+        type: "addEpisode",
+        data: episode.data,
+    })
+}
 export default function seasonsReducer(state, action) {
 
     switch (action.type) {
         case "add": {
+            console.log("adding new season")
             return [...state, {key:v4(), data:action.data}]
         }
         case "addEpisode": {
-            let season = state.map((season) => {
-                if (season.data.index === action.seasonIndex) {
-                    season.data.episodes.push(action.episode)
-                }
+            
+            let newState = state.map((season) => {
+                if (season.data.index === action.data.seasonIndex) {
+                    return {...season, data:{...season.data, episodes:[...season.data.episodes, {key:v4(), data:action.data}]}}
+                } 
                 return season
-                
             })
+           
+            return newState
         }
     }
 }
