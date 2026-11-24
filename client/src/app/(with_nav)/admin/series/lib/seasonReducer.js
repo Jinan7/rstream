@@ -41,7 +41,7 @@ export default function seasonsReducer(state, action) {
         case "addEpisode": {
             
             let newState = state.map((season) => {
-                if (season.key === action.data.seasonId) {
+                if (season.key === action.data.seasonKey) {
                     return {...season, data:{...season.data, episodes:[...season.data.episodes, {key:v4(), data:action.data}]}}
                 } 
                 return season

@@ -39,6 +39,7 @@ export default function Layout({ children, episode, season }) {
     const handleAddSeason = () => {
         addSeason(seasonsDispatch, {
             data: {
+                id: null,
                 index: 0,
                 episodes: []
             }
@@ -55,7 +56,7 @@ export default function Layout({ children, episode, season }) {
 
 
     return (
-        <NewSeriesContext value={{ id, setId, activeLink, seasons, seasonsDispatch }}>
+        <NewSeriesContext value={{ id, setId, activeLink, seasons, seasonsDispatch, handleSetPage }}>
             <div className="flex gap-[20px] ">
                 <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
                     <div className="px-[20px] pt-[12px] pb-[8px]">
@@ -166,6 +167,11 @@ export const useSeriesId = () => {
 export const useSetSeriesId = () => {
     let {setId} = useNewSeriesContext()
     return setId
+}
+
+export const useHandleSetPage = () => {
+    let {handleSetPage} = useNewSeriesContext()
+    return handleSetPage
 }
 
 

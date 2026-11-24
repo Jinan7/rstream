@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { postMovieDetails } from "../../../movies/new/_lib/api";
 import { addFormInput, useMultiFormReducer, removeFormInput } from "../../../movies/new/_lib/multiFormReducer";
@@ -19,24 +19,38 @@ import prettyBytes from 'pretty-bytes'
 import { addEpisode, addSeason, updateSeason, useSeasonsReducer } from "../../lib/seasonReducer";
 import SeasonButton from "../../components/season_button";
 import EpisodeButton from "../../components/episode_button";
-import { useActiveLink, useSeasons, useSeasonsDispatchContext } from "../layout";
+import { useActiveLink, useHandleSetPage, useSeasons, useSeasonsDispatchContext, useSeriesId } from "../layout";
 import prettyMilliseconds from "pretty-ms";
+import { postSeasonDetails } from "./lib/api";
 
 export default function Season() {
 
-
+    let [seasonId, setSeasonId] = useState(null)
+    let seriesId = useSeriesId()
     let seasonsDispatch = useSeasonsDispatchContext()
     let activeLink = useActiveLink()
     let seasons = useSeasons()
     let indexRef = useRef(null)
+    let handleSetPage = useHandleSetPage()
 
+    useEffect(() => {
+        
+        let season = seasons.find((s) => {
+            return s.key === activeLink
+        })
+
+        console.log(season)
+        console.log(seriesId)
+        setSeasonId(season?.data?.id)
+    },[activeLink])
 
     const handleAddEpisode = (e) => {
         e.preventDefault()
         addEpisode(seasonsDispatch,
             {
                 data: {
-                    seasonId: activeLink,
+                    seasonId: null,
+                    seasonKey: activeLink,
                     index: 1,
                     title: "The Hedge Knight"
                 }
@@ -44,7 +58,7 @@ export default function Season() {
         )
     }
 
-    const handleUpdateSeasonDetails = () => {
+    const handleUpdateSeasonDetails = async () => {
         let newIndex = indexRef.current.value
         let season = seasons.find((season) => {
             return season.key === activeLink
@@ -58,6 +72,14 @@ export default function Season() {
             }
         }
 
+        if (seriesId != null) {
+            let response = await postSeasonDetails({
+                index: +newSeason.data.index,
+                series: seriesId
+            })
+            setSeasonId(response.data.id)
+            newSeason.data.id = response.data.id
+        }
         updateSeason(seasonsDispatch,newSeason)
     }
 
@@ -124,12 +146,14 @@ export default function Season() {
                                 ?.data
                                 ?.episodes
                                 ?.map((episode) => {
-                                    console.log(episode)
+                                    
                                     return (
                                     <tr key={episode.key}>
                                         <td className="w-2 border-b-[1px] border-[#e3e1de] pr-[8px]">
                                             <div className="min-w-[100px] py-[6px] pl-[4px]">
-                                                <p className="text-[14px] underline">Details</p>
+                                                <p className="text-[14px] underline cursor-pointer"
+                                                    onClick={handleSetPage("episode", episode.key)}
+                                                >Details</p>
                                             </div>
                                         </td>
                                         <td className="border-b-[1px] border-[#e3e1de] pr-[8px]">
