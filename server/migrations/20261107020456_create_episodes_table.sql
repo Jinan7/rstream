@@ -4,5 +4,7 @@ CREATE TABLE episodes(
     title TEXT NOT NULL,
     index INT NOT NULL,
     season uuid NOT NULL references seasons(id),
-    duration INT NOT NULL
+    release_date DATE NOT NULL,
+    duration INT NOT NULL,
+    summary TEXT NOT NULL
 );

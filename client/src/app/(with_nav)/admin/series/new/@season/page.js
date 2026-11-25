@@ -19,7 +19,7 @@ import prettyBytes from 'pretty-bytes'
 import { addEpisode, addSeason, updateSeason, useSeasonsReducer } from "../../lib/seasonReducer";
 import SeasonButton from "../../components/season_button";
 import EpisodeButton from "../../components/episode_button";
-import { useActiveLink, useHandleSetPage, useSeasons, useSeasonsDispatchContext, useSeriesId } from "../layout";
+import { useActiveLink, useHandleSetEpisodePage, useHandleSetPage, useSeasons, useSeasonsDispatchContext, useSeriesId } from "../layout";
 import prettyMilliseconds from "pretty-ms";
 import { postSeasonDetails } from "./lib/api";
 
@@ -32,15 +32,14 @@ export default function Season() {
     let seasons = useSeasons()
     let indexRef = useRef(null)
     let handleSetPage = useHandleSetPage()
+    let handleSetEpisodePage = useHandleSetEpisodePage()
 
     useEffect(() => {
-        
+        console.log("season page running")
         let season = seasons.find((s) => {
             return s.key === activeLink
         })
 
-        console.log(season)
-        console.log(seriesId)
         setSeasonId(season?.data?.id)
     },[activeLink])
 
@@ -49,6 +48,7 @@ export default function Season() {
         addEpisode(seasonsDispatch,
             {
                 data: {
+                    id: null,
                     seasonId: null,
                     seasonKey: activeLink,
                     index: 1,
@@ -152,7 +152,7 @@ export default function Season() {
                                         <td className="w-2 border-b-[1px] border-[#e3e1de] pr-[8px]">
                                             <div className="min-w-[100px] py-[6px] pl-[4px]">
                                                 <p className="text-[14px] underline cursor-pointer"
-                                                    onClick={handleSetPage("episode", episode.key)}
+                                                    onClick={handleSetEpisodePage("episode", episode.key, episode.data.seasonKey)}
                                                 >Details</p>
                                             </div>
                                         </td>

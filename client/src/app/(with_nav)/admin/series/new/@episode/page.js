@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 import { postMovieDetails } from "../../../movies/new/_lib/api";
 import { addFormInput, useMultiFormReducer, removeFormInput } from "../../../movies/new/_lib/multiFormReducer";
@@ -19,10 +19,18 @@ import prettyBytes from 'pretty-bytes'
 import { addSeason, useSeasonsReducer } from "../../lib/seasonReducer";
 import SeasonButton from "../../components/season_button";
 import EpisodeButton from "../../components/episode_button";
+import { useActiveLink, useActiveSeasonLink, useSeasons, useSeasonsDispatchContext } from "../layout";
+import { postEpisodeDetails } from "./lib/api";
 
 export default function Episode() {
 
-     let [id, setId] = useState(null)
+    let [episodeId, setEpisodeId] = useState(null)
+    let [seasonId, setSeasonId] = useState(null)
+    let seasonsDispatch = useSeasonsDispatchContext()
+    let activeLink = useActiveLink()
+    let seasons = useSeasons()
+    let activeSeasonLink = useActiveSeasonLink()
+
     let indexRef = useRef(null)
     let titleRef = useRef(null)
     let releaseDateRef = useRef(null)
@@ -49,15 +57,44 @@ export default function Episode() {
     let [bannerSize, setBannerSize] = useState("0 Kb")
     let [portraitRate, setPortraitRate] = useState("0 k/s")
     let [bannerRate, setBannerRate] = useState("0 k/s")
-    let [seasons, seasonsDispatch] = useSeasonsReducer([])
 
-    const handleUploadEpisodeDetails = () => {
-        let index = indexRef.current.value
+    useEffect(() => {
+        
+        console.log(activeLink)
+        let currentSeason = seasons.find((s) => {
+            return s.key === activeSeasonLink
+        })
+        console.log(currentSeason)
+        let episode = currentSeason?.data?.episodes?.find((e) => {
+            return e.key === activeLink
+        })
+
+        setSeasonId(currentSeason?.data?.id)
+        setEpisodeId(episode?.data?.id)
+    },[activeLink])
+
+    const handleUploadEpisodeDetails = async () => {
+        console.log(seasonId)
+        let index = +indexRef.current.value
         let title = titleRef.current.value
         let releaseDate = releaseDateRef.current.value
         let duration = +hourRef.current.value * 60 + +minRef.current.value
         let rating = +ratingRef.current.value
         let summary = summaryRef.current.value
+
+        if (seasonId != null) {
+
+            let response = await postEpisodeDetails({
+                title: title,
+                index: index,
+                season: seasonId,
+                releaseDate: releaseDate,
+                duration: duration,
+                summary: summary,
+            })
+            console.log(response)
+        }
+
 
     }
     const handlePortraitChange = () => {
@@ -137,7 +174,7 @@ export default function Episode() {
                     </div>
                     <TextField label={"Summary"} ref={summaryRef}/>
                     <div className="flex justify-end">
-                        <Button variant={"dark"} label={"Submit"} onClick={null}/>
+                        <Button variant={"dark"} label={"Submit"} onClick={handleUploadEpisodeDetails}/>
                     </div>
                 </div>
             </div>

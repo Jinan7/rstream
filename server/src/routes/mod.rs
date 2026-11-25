@@ -7,5 +7,6 @@ pub mod signout;
 pub mod auth_proxy;
 pub mod series;
 pub mod seasons;
+pub mod episodes;
 
 pub use health_check::*;

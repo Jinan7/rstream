@@ -27,6 +27,7 @@ export default function Layout({ children, episode, season }) {
 
     let detailsLinkId = useRef(v4())
     let [activeLink, setActiveLink] = useState(detailsLinkId)
+    let [activeSeasonLink, setActiveSeasonLink] = useState(null)
     let [page, setPage] = useState("details")
     let [id, setId] = useState(null)
     let [directors, directorsDispatch] = useMultiFormReducer([])
@@ -54,9 +55,17 @@ export default function Layout({ children, episode, season }) {
         }
     }
 
+    const handleSetEpisodePage = (p, id, seasonId) => {
+        return () => {
+            setPage(p)
+            setActiveLink(id)
+            setActiveSeasonLink(seasonId)
+        }
+    }
+
 
     return (
-        <NewSeriesContext value={{ id, setId, activeLink, seasons, seasonsDispatch, handleSetPage }}>
+        <NewSeriesContext value={{ id, setId, activeLink, seasons, seasonsDispatch, handleSetPage, activeSeasonLink, setActiveSeasonLink, handleSetEpisodePage }}>
             <div className="flex gap-[20px] ">
                 <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
                     <div className="px-[20px] pt-[12px] pb-[8px]">
@@ -112,7 +121,7 @@ export default function Layout({ children, episode, season }) {
                                                 />
                                                 {
                                                     s.data.episodes.map((e) => {
-                                                        return <EpisodeButton key={e.key} label={"Episode 1"} onClick={handleSetPage("episode", e.key)}
+                                                        return <EpisodeButton key={e.key} label={"Episode 1"} onClick={handleSetEpisodePage("episode", e.key, s.key)}
                                                             active={e.key===activeLink}
                                                         />
                                                     })
@@ -174,4 +183,18 @@ export const useHandleSetPage = () => {
     return handleSetPage
 }
 
+export const useActiveSeasonLink = () => {
+    let {activeSeasonLink} = useNewSeriesContext()
+    return activeSeasonLink
+}
+
+export const useSetActiveSeasonLink = () => {
+    let {setActiveSeasonLink} = useNewSeriesContext()
+    return setActiveSeasonLink
+}
+
+export const useHandleSetEpisodePage = () => {
+    let {handleSetEpisodePage} = useNewSeriesContext()
+    return handleSetEpisodePage
+}
 
