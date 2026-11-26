@@ -8,8 +8,8 @@ mod db;
 
 pub use get_presigned_url::*;
 pub use create_multipart::*;
-pub use upload_part_presigned::*;
-pub use complete_multipart::*;
+pub use upload_part_presigned::upload_part_presigned;
+pub use complete_multipart::complete_multipart;
 pub use path::*;
 pub use complete_put::*;
 pub use db::*;

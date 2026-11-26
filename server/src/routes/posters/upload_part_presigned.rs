@@ -1,7 +1,7 @@
 use actix_web::{HttpResponse, web};
 use serde::{Deserialize, Serialize};
 
-use crate::{errors::{bad_request, internal_server_error}, routes::posters::{PathInfo, QueryInfo}, s3::{self, upload_part}, startup::{Bucket, PresignedExpiresIn}};
+use crate::{errors::{bad_request, internal_server_error}, routes::posters::{PathInfo, QueryInfo}, s3::{upload_part}, startup::{Bucket, PresignedExpiresIn}};
 
 #[derive(Deserialize)]
 pub struct RequestPayload {

@@ -83,46 +83,5 @@ pub async fn complete_multipart(
     Ok(HttpResponse::Ok().finish())
 }
 
-pub async fn update_movie_portrait(
-    pool: &PgPool,
-    id: uuid::Uuid,
-    url: &str,
-) -> Result<(), sqlx::Error> {
 
-    sqlx::query!(
-        r#"
-            UPDATE movies
-            SET portrait_url = $2
-            WHERE id = $1
-        "#,
-        id,
-        url
 
-    )
-    .execute(pool)
-    .await?;
-
-    Ok(())
-}
-
-pub async fn update_movie_banner(
-    pool: &PgPool,
-    id: uuid::Uuid,
-    url: &str,
-) -> Result<(), sqlx::Error> {
-
-    sqlx::query!(
-        r#"
-            UPDATE movies
-            SET banner_url = $2
-            WHERE id = $1
-        "#,
-        id,
-        url
-
-    )
-    .fetch_one(pool)
-    .await?;
-
-    Ok(())
-}

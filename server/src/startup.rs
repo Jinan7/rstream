@@ -1,9 +1,9 @@
 use std::net::TcpListener;
 use actix_session::{SessionMiddleware, storage::RedisSessionStore};
-use actix_web::{App, HttpServer, cookie::Key, dev::Server, http::header, middleware::from_fn, web};
+use actix_web::{App, HttpServer, cookie::Key, dev::Server, middleware::from_fn, web};
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{self, auth_proxy, episodes, genres, health_check,posters, movies , seasons, series, signin, signout, signup}, s3};
+use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{auth_proxy, episodes, genres, health_check,posters, movies , seasons, series, signin, signout, signup}, s3};
 
 pub struct Application {
     pub port: u16,

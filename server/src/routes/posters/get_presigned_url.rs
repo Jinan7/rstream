@@ -1,6 +1,5 @@
 use actix_web::{HttpResponse, web};
-use serde::{Deserialize, Serialize};
-use sqlx::PgPool;
+use serde::{Serialize};
 
 use crate::{errors::{bad_request, internal_server_error}, routes::posters::{PathInfo, QueryInfo}, s3::put::put_presigned, startup::{Bucket, PresignedExpiresIn}};
 
@@ -14,7 +13,6 @@ pub struct ResponsePayload {
 pub async fn get_presigned_url(
     query: web::Query<QueryInfo>,
     info: web::Path<PathInfo>,
-    pool: web::Data<PgPool>,
     client: web::Data<aws_sdk_s3::Client>,
     bucket: web::Data<Bucket>,
     presigned_expires_in: web::Data<PresignedExpiresIn>

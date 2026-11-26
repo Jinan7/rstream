@@ -1,5 +1,4 @@
 use actix_web::{HttpResponse, web};
-use aws_sdk_s3::types::Protocol::Http;
 use chrono::NaiveDate;
 use serde::Serialize;
 use sqlx::PgPool;
