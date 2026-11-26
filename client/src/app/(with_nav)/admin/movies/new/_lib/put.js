@@ -2,10 +2,13 @@ import { completePosterMultipartUpload, completePutPoster, createPosterMultipart
 
 const CHUNK_SIZE = 5 * 1024 * 1024;
 
-export const putFile = async (id, file, aspect, ref, progress, setProgress, setRate) => {
+export const putFile = async (id, file, tv, aspect, ref, progress, setProgress, setRate) => {
 
     
-    let data = await getPosterPresignedUrl(`${id}/${file.name}`)
+    let data = await getPosterPresignedUrl(`${id}/${file.name}`, {
+        tv: tv,
+        aspect: aspect,
+    })
 
    
     let response = await putPoster(data.presignedUrl, file, ref, progress, setProgress, setRate, file.size)
@@ -13,6 +16,7 @@ export const putFile = async (id, file, aspect, ref, progress, setProgress, setR
     
     try {
         await completePutPoster(`${id}/${file.name}`, {
+            tv: tv,
             aspect: aspect
         })
         setProgress(100)
@@ -25,12 +29,15 @@ export const putFile = async (id, file, aspect, ref, progress, setProgress, setR
     
 }
 
-export const uploadFileMultipart = async (id, file, aspect, ref, progress, setProgress, setRate) => {
+export const uploadFileMultipart = async (id, file, tv, aspect, ref, progress, setProgress, setRate) => {
     
     let stream = file.stream();
     let reader = stream.getReader({ mode: "byob" })
     let key = `${id}/${file.name}`
-    let uploadId = await createPosterMultipartUpload(`${id}/${file.name}`)
+    let uploadId = await createPosterMultipartUpload(`${id}/${file.name}`,{
+        tv: tv,
+        aspect: aspect,
+    })
 
     let parts = []
     // part variables
@@ -39,6 +46,10 @@ export const uploadFileMultipart = async (id, file, aspect, ref, progress, setPr
         {
             uploadId: uploadId.uploadId,
             partNumber: partNumber
+        },
+        {
+            tv:tv,
+            aspect:aspect,
         }
     )
     
@@ -76,6 +87,10 @@ export const uploadFileMultipart = async (id, file, aspect, ref, progress, setPr
                 {
                     uploadId: uploadId.uploadId,
                     partNumber: partNumber
+                },
+                {
+                    tv:tv,
+                    aspect:aspect
                 }
             )
             offset = 0
@@ -90,6 +105,7 @@ export const uploadFileMultipart = async (id, file, aspect, ref, progress, setPr
                 parts: parts
             },
             {
+                tv: tv,
                 aspect: aspect
             }   
         )  

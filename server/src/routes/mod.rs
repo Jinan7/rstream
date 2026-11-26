@@ -8,5 +8,7 @@ pub mod auth_proxy;
 pub mod series;
 pub mod seasons;
 pub mod episodes;
+pub mod posters;
+
 
 pub use health_check::*;

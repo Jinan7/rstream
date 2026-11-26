@@ -8,5 +8,6 @@ pub struct PathInfo {
 
 #[derive(Deserialize, Debug)]
 pub struct QueryInfo {
-    pub aspect: String,
+    pub aspect: Option<String>,
+    pub tv: Option<String>
 }

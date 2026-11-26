@@ -160,9 +160,9 @@ export default function Page() {
             if (file && id) {
                 handleFormatSize(file.size, setSize)
                 if (file.size < FIVE_MEGABYTES) {
-                    await putFile(id, file, 'portrait', ref, progress, setProgress, setRate)
+                    await putFile(id, file, 'movies', 'portrait', ref, progress, setProgress, setRate)
                 } else {
-                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress,setRate)
+                    await uploadFileMultipart(id, file, 'movies', 'portrait', ref, progress, setProgress,setRate)
                 }
 
             } else {
@@ -181,9 +181,9 @@ export default function Page() {
             if (file && id) {
                 handleFormatSize(file.size, setSize)
                 if (file.size < FIVE_MEGABYTES) {
-                    await putFile(id, file, 'banner', ref, progress, setProgress, setRate )
+                    await putFile(id, file, 'movies', 'banner', ref, progress, setProgress, setRate )
                 } else {
-                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress, setRate )
+                    await uploadFileMultipart(id, file,'movies', 'banner', ref, progress, setProgress, setRate )
                 }
 
             } else {

@@ -20,7 +20,8 @@ import { addSeason, useSeasonsReducer } from "../lib/seasonReducer";
 import SeasonButton from "../components/season_button";
 import EpisodeButton from "../components/episode_button";
 import { postSeriesDetails } from "./lib/api";
-import { useSeriesId, useSetSeriesId } from "./layout";
+import { useDirectors, useDirectorsDispatch, useGenres, useGenresDispatch, useSeriesId, useSetSeriesId, useStars, useStarsDispatch, useWriters, useWritersDispatch } from "./layout";
+import { putFile, uploadFileMultipart } from "../../movies/new/_lib/put";
 
 const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Page() {
@@ -47,10 +48,14 @@ export default function Page() {
     let bannerRef = useRef(null)
     let bannerProgressRef = useRef(0)
     let [bannerProgress, setBannerProgress] = useState("0")
-    let [directors, directorsDispatch] = useMultiFormReducer([])
-    let [writers, writersDispatch] = useMultiFormReducer([])
-    let [stars, starsDispatch] = useMultiFormReducer([])
-    let [genres, genresDispatch] = useMultiFormReducer([])
+    let directorsDispatch = useDirectorsDispatch()
+    let writersDispatch = useWritersDispatch()
+    let starsDispatch = useStarsDispatch()
+    let genresDispatch = useGenresDispatch()
+    let directors = useDirectors()
+    let writers = useWriters()
+    let stars = useStars()
+    let genres = useGenres()
     let [showDurationDropdown, setShowDurationDropdown] = useState(false)
     let [portraitSize, setPortraitSize] = useState("0 Kb")
     let [bannerSize, setBannerSize] = useState("0 Kb")
@@ -86,9 +91,6 @@ export default function Page() {
         directorRef.current.value = ""
         
     }
-    const handleRemoveDirector = (key) => {
-        return () => removeFormInput(directorsDispatch, key)
-    }
     const handleAddWriter = () => {
         let newWriter = writersRef.current.value
         addFormInput(writersDispatch, newWriter)
@@ -99,20 +101,13 @@ export default function Page() {
         addFormInput(genresDispatch, newGenre)
         genreRef.current.value = ""
     }
-    const handleRemoveGenre = (key) => {
-        return () => removeFormInput(genresDispatch, key)
-    }
-    const handleRemoveWriter = (key) => {
-        return () => removeFormInput(writersDispatch, key)
-    }
+    
     const handleAddStar = () => {
         let newStar = starsRef.current.value
         addFormInput(starsDispatch, newStar)
         starsRef.current.value = ""
     }
-    const handleRemoveStar = (key) => {
-        return () => removeFormInput(starsDispatch, key)
-    }
+    
     const handleAddSeason = () => {
         addSeason(seasonsDispatch, {
             data: {
@@ -162,23 +157,23 @@ export default function Page() {
     }
 
     const handleUploadMoviePortrait = ( ref, progress, setProgress, setRate, setSize ) => {
-
-        return async () => {
-            let file = portraitRef.current.files[0];
-
-            if (file && id) {
-                handleFormatSize(file.size, setSize)
-                if (file.size < FIVE_MEGABYTES) {
-                    await putFile(id, file, 'portrait', ref, progress, setProgress, setRate)
+    
+            return async () => {
+                let file = portraitRef.current.files[0];
+    
+                if (file && id) {
+                    handleFormatSize(file.size, setSize)
+                    if (file.size < FIVE_MEGABYTES) {
+                        await putFile(id, file, 'series', 'portrait', ref, progress, setProgress, setRate)
+                    } else {
+                        await uploadFileMultipart(id, file, 'series', 'portrait', ref, progress, setProgress,setRate)
+                    }
+    
                 } else {
-                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress,setRate)
+    
                 }
-
-            } else {
-
             }
-        }
-        
+            
     }
 
 
@@ -190,9 +185,9 @@ export default function Page() {
             if (file && id) {
                 handleFormatSize(file.size, setSize)
                 if (file.size < FIVE_MEGABYTES) {
-                    await putFile(id, file, 'banner', ref, progress, setProgress, setRate )
+                    await putFile(id, file, 'series', 'banner', ref, progress, setProgress, setRate )
                 } else {
-                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress, setRate )
+                    await uploadFileMultipart(id, file,'series', 'banner', ref, progress, setProgress, setRate )
                 }
 
             } else {

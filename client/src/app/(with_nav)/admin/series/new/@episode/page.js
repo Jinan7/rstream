@@ -21,7 +21,9 @@ import SeasonButton from "../../components/season_button";
 import EpisodeButton from "../../components/episode_button";
 import { useActiveLink, useActiveSeasonLink, useSeasons, useSeasonsDispatchContext } from "../layout";
 import { postEpisodeDetails } from "./lib/api";
+import { putFile, uploadFileMultipart } from "../../../movies/new/_lib/put";
 
+const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Episode() {
 
     let [episodeId, setEpisodeId] = useState(null)
@@ -73,6 +75,10 @@ export default function Episode() {
         setEpisodeId(episode?.data?.id)
     },[activeLink])
 
+    const handleFormatSize = (size, setSize) => {
+        setSize(prettyBytes(size))
+    }
+
     const handleUploadEpisodeDetails = async () => {
         console.log(seasonId)
         let index = +indexRef.current.value
@@ -92,7 +98,8 @@ export default function Episode() {
                 duration: duration,
                 summary: summary,
             })
-            console.log(response)
+            
+            setEpisodeId(response?.data?.id)
         }
 
 
@@ -119,34 +126,37 @@ export default function Episode() {
     }
     
     const handleUploadMoviePortrait = ( ref, progress, setProgress, setRate, setSize ) => {
-
-        return async () => {
-            let file = portraitRef.current.files[0];
-
-            if (file && id) {
-                handleFormatSize(file.size, setSize)
-                if (file.size < FIVE_MEGABYTES) {
-                    await putFile(id, file, 'portrait', ref, progress, setProgress, setRate)
+    
+            return async () => {
+                let file = portraitRef.current.files[0];
+    
+                if (file && episodeId) {
+                    handleFormatSize(file.size, setSize)
+                    if (file.size < FIVE_MEGABYTES) {
+                        await putFile(episodeId, file, 'episodes', 'portrait', ref, progress, setProgress, setRate)
+                    } else {
+                        await uploadFileMultipart(episodeId, file, 'episodes', 'portrait', ref, progress, setProgress,setRate)
+                    }
+    
                 } else {
-                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress,setRate)
+    
                 }
-
-            } else {
-
             }
-        }
-        
+            
     }
+
+
+
     const handleUploadMovieBanner = ( ref, progress, setProgress, setRate, setSize ) => {
         return async () => {
             let file = bannerRef.current.files[0];
 
-            if (file && id) {
+            if (file && episodeId) {
                 handleFormatSize(file.size, setSize)
                 if (file.size < FIVE_MEGABYTES) {
-                    await putFile(id, file, 'banner', ref, progress, setProgress, setRate )
+                    await putFile(episodeId, file, 'episodes', 'banner', ref, progress, setProgress, setRate )
                 } else {
-                    await uploadFileMultipart(id, file, 'portrait', ref, progress, setProgress, setRate )
+                    await uploadFileMultipart(episodeId, file,'episodes', 'banner', ref, progress, setProgress, setRate )
                 }
 
             } else {

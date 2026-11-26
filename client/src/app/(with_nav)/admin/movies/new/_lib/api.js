@@ -1,4 +1,4 @@
-import { api } from "@/lib/axios";
+import { api, s3Client } from "@/lib/axios";
 import prettyBytes from "pretty-bytes";
 
 export const postMovieDetails = async (data) => {
@@ -6,14 +6,16 @@ export const postMovieDetails = async (data) => {
     return response.data   
 }
 
-export const getPosterPresignedUrl = async (key) => {
-    let response = await api.get(`/movies/posters/${key}`)
+export const getPosterPresignedUrl = async (key, params) => {
+    let response = await api.get(`/posters/${key}`, {
+        params: params
+    })
     return response.data
 }
 
 export const putPoster = async (uri, file, ref, progress, setProgress, setRate, totalSize) => {
     
-    let response = await api.put(uri, file, {
+    let response = await s3Client.put(uri, file, {
         headers: {
             "Content-Type" : "application/octet-stream"
         },
@@ -32,19 +34,21 @@ export const putPoster = async (uri, file, ref, progress, setProgress, setRate, 
 }
 
 export const completePutPoster = async (key, params) => {
-    let response = await api.get(`/movies/posters/complete/${key}`, {
+    let response = await api.get(`/posters/complete/${key}`, {
         params: params
     })
     return response
 }
 
-export const createPosterMultipartUpload = async (key) => {
-    let response = await api.get(`/movies/posters/multipart/${key}`)
+export const createPosterMultipartUpload = async (key, params) => {
+    let response = await api.get(`/posters/multipart/${key}`, {
+        params: params
+    })
     return response.data
 }
 
 export const completePosterMultipartUpload = async (key, data, params) => {
-    let response = await api.post(`/movies/posters/complete_multipart/${key}`, data, 
+    let response = await api.post(`/posters/complete_multipart/${key}`, data, 
         {
             params: params
         }
@@ -52,18 +56,17 @@ export const completePosterMultipartUpload = async (key, data, params) => {
     return response
 }
 
-export const getPosterPartPresignedUrl = async (key, data) => {
-    let response = await api.post(`/movies/posters/multipart/${key}`, data)
+export const getPosterPartPresignedUrl = async (key, data, params) => {
+    let response = await api.post(`/posters/multipart/${key}`, data, {
+        params: params
+    })
     return response.data
 }
 
 export const putPart = async (uri, chunk, ref, progress, setProgress, setRate, totalSize) => {
     
-    let response = await api.put(uri, chunk, {
-        headers: {
-            "Content-Type" : "image/jpeg"
-            
-        },
+    let response = await s3Client.put(uri, chunk, {
+
         onUploadProgress: (progressEvent) => {
            
             let rate = progressEvent.rate ? progressEvent.rate : 0

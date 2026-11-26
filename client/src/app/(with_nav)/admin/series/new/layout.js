@@ -36,6 +36,21 @@ export default function Layout({ children, episode, season }) {
     let [genres, genresDispatch] = useMultiFormReducer([])
     let [seasons, seasonsDispatch] = useSeasonsReducer([])
 
+    const handleRemoveDirector = (key) => {
+        return () => removeFormInput(directorsDispatch, key)
+    }
+
+    const handleRemoveGenre = (key) => {
+        return () => removeFormInput(genresDispatch, key)
+    }
+
+    const handleRemoveWriter = (key) => {
+        return () => removeFormInput(writersDispatch, key)
+    }
+
+    const handleRemoveStar = (key) => {
+        return () => removeFormInput(starsDispatch, key)
+    }
 
     const handleAddSeason = () => {
         addSeason(seasonsDispatch, {
@@ -65,7 +80,25 @@ export default function Layout({ children, episode, season }) {
 
 
     return (
-        <NewSeriesContext value={{ id, setId, activeLink, seasons, seasonsDispatch, handleSetPage, activeSeasonLink, setActiveSeasonLink, handleSetEpisodePage }}>
+        <NewSeriesContext value={{ 
+            id, 
+            setId, 
+            activeLink, 
+            seasons, 
+            seasonsDispatch,  
+            handleSetPage, 
+            activeSeasonLink, 
+            setActiveSeasonLink, 
+            handleSetEpisodePage,
+            genres,
+            writers,
+            directors,
+            stars,
+            genresDispatch,
+            writersDispatch,
+            directorsDispatch,
+            starsDispatch,
+            }}>
             <div className="flex gap-[20px] ">
                 <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
                     <div className="px-[20px] pt-[12px] pb-[8px]">
@@ -196,5 +229,45 @@ export const useSetActiveSeasonLink = () => {
 export const useHandleSetEpisodePage = () => {
     let {handleSetEpisodePage} = useNewSeriesContext()
     return handleSetEpisodePage
+}
+
+export const useGenresDispatch = () => {
+    let {genresDispatch} = useNewSeriesContext()
+    return genresDispatch
+}
+
+export const useWritersDispatch = () => {
+    let {writersDispatch} = useNewSeriesContext()
+    return writersDispatch
+}
+
+export const useStarsDispatch = () => {
+    let {starsDispatch} = useNewSeriesContext()
+    return starsDispatch
+}
+
+export const useDirectorsDispatch = () => {
+    let {directorsDispatch} = useNewSeriesContext()
+    return directorsDispatch
+}
+
+export const useDirectors = () => {
+    let {directors} = useNewSeriesContext()
+    return directors
+}
+
+export const useWriters = () => {
+    let {writers} = useNewSeriesContext()
+    return writers
+}
+
+export const useStars = () => {
+    let {stars} = useNewSeriesContext()
+    return stars
+}
+
+export const useGenres = () => {
+    let {genres} = useNewSeriesContext()
+    return genres
 }
 

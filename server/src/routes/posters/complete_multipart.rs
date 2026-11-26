@@ -5,7 +5,7 @@ use aws_sdk_s3::{types::{CompletedMultipartUpload, CompletedPart}};
 use serde::{Deserialize};
 use sqlx::PgPool;
 
-use crate::{errors::internal_server_error, routes::movies::posters::{PathInfo, QueryInfo}, s3::complete_multipart::complete_multipart_upload, startup::{Bucket, CloudFrontDomain}};
+use crate::{errors::{bad_request, internal_server_error}, routes::posters::{PathInfo, QueryInfo, update_movie_image}, s3::complete_multipart::complete_multipart_upload, startup::{Bucket, CloudFrontDomain}};
 
 
 #[derive(Deserialize)]
@@ -31,9 +31,28 @@ pub async fn complete_multipart(
     cloudfront_domain: web::Data<CloudFrontDomain>
 ) -> Result<HttpResponse, actix_web::Error> {
 
-    let key = format!("movies/{}/portrait/{}",&info.id, &info.key);
+    let tv = match query.0.tv {
+        Some(s) if s == "movies" => s,
+        Some(s) if s == "series" => s,
+        Some(s) if s == "episodes" => s,
+        _ => {
+            let e = anyhow::anyhow!("tv not specified");
+            return Err(bad_request(e))
+        }
+    };
+    let aspect = match query.0.aspect {
+        Some(s) if s == "portrait" => s,
+        Some(s) if s == "banner" => s,
+        
+        _ => {
+            let e = anyhow::anyhow!("tv not specified");
+            return Err(bad_request(e))
+        }
+    };
+
+    let key = format!("{}/{}/{}/{}",tv,&info.id,&aspect,&info.key);
     
-    println!("{:?}", query);
+    
 
     let parts = payload.parts.iter()
         .map(|part| {
@@ -59,9 +78,7 @@ pub async fn complete_multipart(
     
     let url = format!("https://{}/{}", &cloudfront_domain.0, key);
 
-    let _ = update_movie_portrait(&pool, id, &url)
-        .await
-        .map_err(internal_server_error)?;
+    update_movie_image(&tv, &pool, id, &url, &aspect).await?;
 
     Ok(HttpResponse::Ok().finish())
 }

@@ -9,6 +9,8 @@ const api = axios.create(
     }
 );
 
+const s3Client = axios.create();
+
 const signout = async () => {
     let response = await api.get("/signout")
     return response
@@ -24,4 +26,4 @@ const auth_proxy = async (headers) => {
     return response
 }
 
-export { api, signout, auth_proxy }
+export { api, s3Client, signout, auth_proxy }
