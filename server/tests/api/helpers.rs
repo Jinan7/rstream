@@ -1,4 +1,3 @@
-use actix_web::dev::Server;
 use actix_web_server::configuration::{DatabaseSettings, get_configuration};
 use actix_web_server::startup::Application;
 use sqlx::{AssertSqlSafe, Connection, PgConnection, PgPool};
