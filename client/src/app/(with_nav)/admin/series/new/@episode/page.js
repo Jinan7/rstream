@@ -21,7 +21,7 @@ import SeasonButton from "../../components/season_button";
 import EpisodeButton from "../../components/episode_button";
 import { useActiveLink, useActiveSeasonLink, useSeasons, useSeasonsDispatchContext } from "../layout";
 import { postEpisodeDetails } from "./lib/api";
-import { putFile, uploadFileMultipart } from "../../../movies/new/_lib/put";
+import { putFile, putVideo, uploadFileMultipart, uploadVideoMultipart } from "../../../movies/new/_lib/put";
 
 const FIVE_MEGABYTES = 5 * 1024 * 1024;
 export default function Episode() {
@@ -48,17 +48,23 @@ export default function Episode() {
     let summaryRef = useRef(null)
     let [portrait, setPortrait] = useState("No file selected")
     let [banner, setBanner] = useState("No file selected")
+    let [video, setVideo] = useState("No file selected")
     let portraitRef = useRef(null)
+    let videoRef = useRef(null)
     let portraitProgressRef = useRef(0)
+    let videoProgressRef = useRef(0)
     let [portraitProgress, setPortraitProgress] = useState("0")
+    let [videoProgress, setVideoProgress] = useState("0")
     let bannerRef = useRef(null)
     let bannerProgressRef = useRef(0)
     let [bannerProgress, setBannerProgress] = useState("0")
     let [showDurationDropdown, setShowDurationDropdown] = useState(false)
     let [portraitSize, setPortraitSize] = useState("0 Kb")
     let [bannerSize, setBannerSize] = useState("0 Kb")
+    let [videoSize, setVideoSize] = useState("0 Kb")
     let [portraitRate, setPortraitRate] = useState("0 k/s")
     let [bannerRate, setBannerRate] = useState("0 k/s")
+    let [videoRate, setVideoRate] = useState("0 k/s")
 
     useEffect(() => {
         
@@ -116,6 +122,12 @@ export default function Episode() {
             setBanner(file.name)
         }
     }
+    const handleVideoChange = () => {
+        let file = videoRef.current.files[0]
+        if (file) {
+            setVideo(file.name)
+        }
+    }
     const handleToggleDurationDropdown = () => setShowDurationDropdown(!showDurationDropdown)
     const handleUpdateDurationInput = () => {
         let hours = hourRef.current.value
@@ -165,6 +177,25 @@ export default function Episode() {
         }
     }
 
+    const handleUploadVideo = ( ref, progress, setProgress, setRate, setSize ) => {
+        return async () => {
+            console.log("handling video upload")
+            let file = videoRef.current.files[0];
+            
+            if (file && episodeId) {
+                handleFormatSize(file.size, setSize)
+                if (file.size < FIVE_MEGABYTES) {
+                    await putVideo(episodeId, file, 'episodes', ref, progress, setProgress, setRate )
+                } else {
+                    await uploadVideoMultipart(episodeId, file, 'episodes', ref, progress, setProgress, setRate )
+                }
+
+            } else {
+
+            }
+        }
+    }
+
     return (
         <div className="flex flex-col gap-[20px] grow">
             <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px]">
@@ -201,6 +232,13 @@ export default function Episode() {
                     <LeftIconButton variant="dark" onClick={handleUploadMovieBanner(bannerProgressRef, bannerProgress, setBannerProgress, setBannerRate, setBannerSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                 </div>
                 <FileInput id="banner" label={banner} ref={bannerRef} progress={bannerProgress} size={bannerSize} rate={bannerRate} onChange={handleBannerChange}/>
+            </div>
+            <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
+                <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
+                    <p className="text-[20px] font-bold">Video</p>
+                    <LeftIconButton variant="dark" onClick={handleUploadVideo(videoProgressRef, videoProgress, setVideoProgress, setVideoRate, setVideoSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
+                </div>
+                <FileInput id="video" label={video} ref={videoRef} progress={videoProgress} size={videoSize} rate={videoRate} onChange={handleVideoChange} accept={"video/*"}/>
             </div>
         </div>
     )

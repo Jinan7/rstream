@@ -3,7 +3,7 @@ use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 use actix_web::{App, HttpServer, cookie::Key, dev::Server, middleware::from_fn, web};
 use sqlx::PgPool;
 
-use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{auth_proxy, episodes, genres, health_check,posters, movies , seasons, series, signin, signout, signup}, s3};
+use crate::{authentication::authentication_middle_ware, configuration::{CorsSettings, Settings}, routes::{auth_proxy, episodes, genres, health_check, movies, posters, seasons, series, signin, signout, signup, videos}, s3};
 
 pub struct Application {
     pub port: u16,
@@ -88,6 +88,11 @@ pub async fn run(listener: TcpListener, pool: PgPool, cors: CorsSettings, redis_
                             .route("/posters/{id}/{key}",web::get().to(posters::get_presigned_url))
                             .route("/posters/complete_multipart/{id}/{key}", web::post().to(posters::complete_multipart))
                             .route("/posters/complete/{id}/{key}", web::get().to(posters::complete_put))
+                            .route("/videos/multipart/{id}/{key}", web::get().to(videos::create_multipart))
+                            .route("/videos/multipart/{id}/{key}", web::post().to(videos::upload_part_presigned))
+                            .route("/videos/{id}/{key}",web::get().to(videos::get_presigned_url))
+                            .route("/videos/complete_multipart/{id}/{key}", web::post().to(videos::complete_multipart))
+                            .route("/videos/complete/{id}/{key}", web::get().to(videos::complete_put))
                         )
                         
                          

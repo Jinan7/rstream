@@ -13,7 +13,12 @@ export const getPosterPresignedUrl = async (key, params) => {
     return response.data
 }
 
-export const putPoster = async (uri, file, ref, progress, setProgress, setRate, totalSize) => {
+export const getVideoPresignedUrl = async (key) => {
+    let response = await api.get(`/videos/${key}`)
+    return response.data
+}
+
+export const putS3File = async (uri, file, ref, progress, setProgress, setRate, totalSize) => {
     
     let response = await s3Client.put(uri, file, {
         headers: {
@@ -33,6 +38,7 @@ export const putPoster = async (uri, file, ref, progress, setProgress, setRate, 
     return response
 }
 
+
 export const completePutPoster = async (key, params) => {
     let response = await api.get(`/posters/complete/${key}`, {
         params: params
@@ -40,10 +46,20 @@ export const completePutPoster = async (key, params) => {
     return response
 }
 
+export const completePutVideo = async (key, params) => {
+    let response = await api.get(`/videos/complete/${key}`, {params:params})
+    return response
+}
+
 export const createPosterMultipartUpload = async (key, params) => {
     let response = await api.get(`/posters/multipart/${key}`, {
         params: params
     })
+    return response.data
+}
+
+export const createVideoMultipartUpload = async (key) => {
+    let response = await api.get(`/videos/multipart/${key}`)
     return response.data
 }
 
@@ -56,12 +72,24 @@ export const completePosterMultipartUpload = async (key, data, params) => {
     return response
 }
 
+export const completeVideoMultipartUpload = async (key, data, params) => {
+    let response = await api.post(`/videos/complete_multipart/${key}`, data, {params:params})
+    return response
+}
+
 export const getPosterPartPresignedUrl = async (key, data, params) => {
     let response = await api.post(`/posters/multipart/${key}`, data, {
         params: params
     })
     return response.data
 }
+
+export const getVideoPartPresignedUrl = async (key, data) => {
+    let response = await api.post(`/videos/multipart/${key}`, data)
+    return response.data
+}
+
+
 
 export const putPart = async (uri, chunk, ref, progress, setProgress, setRate, totalSize) => {
     

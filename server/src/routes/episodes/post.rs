@@ -55,8 +55,9 @@ pub async fn insert_episode(
                 release_date,
                 summary,
                 portrait_url,
-                banner_url
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, '', '')
+                banner_url,
+                video_url
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, '', '', '')
         "#,
         id,
         episode.title,

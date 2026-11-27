@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { v4 } from "uuid";
 import { postMovieDetails } from "./_lib/api";
 import { addFormInput, removeFormInput, useDirectorsReducer, useMultiFormReducer } from "./_lib/multiFormReducer";
-import { putFile, uploadFileMultipart } from "./_lib/put";
+import { putFile, putVideo, uploadFileMultipart, uploadVideoMultipart } from "./_lib/put";
 import Button from "@/app/(with_nav)/_components/button";
 import { Image, PictureInPicture, Upload, X } from "lucide-react";
 import IconButton from "@/app/(with_nav)/_components/icon_button";
@@ -36,12 +36,16 @@ export default function Page() {
     let summaryRef = useRef(null)
     let [portrait, setPortrait] = useState("No file selected")
     let [banner, setBanner] = useState("No file selected")
+    let [video, setVideo] = useState("No file selected")
     let portraitRef = useRef(null)
     let portraitProgressRef = useRef(0)
     let [portraitProgress, setPortraitProgress] = useState("0")
     let bannerRef = useRef(null)
     let bannerProgressRef = useRef(0)
     let [bannerProgress, setBannerProgress] = useState("0")
+    let videoRef = useRef(null)
+    let videoProgressRef = useRef(0)
+    let [videoProgress, setVideoProgress] = useState("0")
     let [directors, directorsDispatch] = useMultiFormReducer([])
     let [writers, writersDispatch] = useMultiFormReducer([])
     let [stars, starsDispatch] = useMultiFormReducer([])
@@ -49,8 +53,10 @@ export default function Page() {
     let [showDurationDropdown, setShowDurationDropdown] = useState(false)
     let [portraitSize, setPortraitSize] = useState("0 Kb")
     let [bannerSize, setBannerSize] = useState("0 Kb")
+    let [videoSize, setVideoSize] = useState("0 Kb")
     let [portraitRate, setPortraitRate] = useState("0 k/s")
     let [bannerRate, setBannerRate] = useState("0 k/s")
+    let [videoRate, setVideoRate] = useState("0 k/s")
 
     const handlePortraitChange = () => {
         let file = portraitRef.current.files[0]
@@ -63,6 +69,13 @@ export default function Page() {
         let file = bannerRef.current.files[0]
         if (file) {
             setBanner(file.name)
+        }
+    }
+
+    const handleVideoChange = () => {
+        let file = videoRef.current.files[0]
+        if (file) {
+            setVideo(file.name)
         }
     }
 
@@ -192,6 +205,25 @@ export default function Page() {
         }
     }
 
+    const handleUploadVideo = ( ref, progress, setProgress, setRate, setSize ) => {
+        return async () => {
+            console.log("handling video upload")
+            let file = videoRef.current.files[0];
+            
+            if (file && id) {
+                handleFormatSize(file.size, setSize)
+                if (file.size < FIVE_MEGABYTES) {
+                    await putVideo(id, file, 'movies', ref, progress, setProgress, setRate )
+                } else {
+                    await uploadVideoMultipart(id, file, 'movies', ref, progress, setProgress, setRate )
+                }
+
+            } else {
+
+            }
+        }
+    }
+
     return (
         <div className="flex gap-[20px] ">
             <div className="bg-white border-rborder border-[1px] rounded-[2px] w-[280px]">
@@ -265,14 +297,21 @@ export default function Page() {
                         <p className="text-[20px] font-bold">Portrait</p>
                         <LeftIconButton variant="dark" onClick={handleUploadMoviePortrait(portraitProgressRef, portraitProgress, setPortraitProgress, setPortraitRate, setPortraitSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                     </div>
-                    <FileInput id="portrait" label={portrait} ref={portraitRef} progress={portraitProgress} size={portraitSize} rate={portraitRate} onChange={handlePortraitChange}/>
+                    <FileInput id="portrait" label={portrait} ref={portraitRef} progress={portraitProgress} size={portraitSize} rate={portraitRate} onChange={handlePortraitChange} accept={"image/*"}/>
                 </div>
                 <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
                     <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
                         <p className="text-[20px] font-bold">Banner</p>
                         <LeftIconButton variant="dark" onClick={handleUploadMovieBanner(bannerProgressRef, bannerProgress, setBannerProgress, setBannerRate, setBannerSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
                     </div>
-                    <FileInput id="banner" label={banner} ref={bannerRef} progress={bannerProgress} size={bannerSize} rate={bannerRate} onChange={handleBannerChange}/>
+                    <FileInput id="banner" label={banner} ref={bannerRef} progress={bannerProgress} size={bannerSize} rate={bannerRate} onChange={handleBannerChange} accept={"image/*"}/>
+                </div>
+                <div className="flex flex-col bg-white border-rborder border-[1px] rounded-[2px] grow">
+                    <div className="px-[20px] pt-[12px] pb-[8px] flex justify-between">
+                        <p className="text-[20px] font-bold">Video</p>
+                        <LeftIconButton variant="dark" onClick={handleUploadVideo(videoProgressRef, videoProgress, setVideoProgress, setVideoRate, setVideoSize)} label={"Upload"}><Upload className="size-[16px] text-white"/></LeftIconButton>
+                    </div>
+                    <FileInput id="video" label={video} ref={videoRef} progress={videoProgress} size={videoSize} rate={videoRate} onChange={handleVideoChange} accept={"video/*"}/>
                 </div>
             </div>
 

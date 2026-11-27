@@ -2,7 +2,7 @@ import IconButton from "@/app/(with_nav)/_components/icon_button";
 import UploadProgress from "./upload_progress";
 import { Image } from "lucide-react";
 
-export default function FileInput({ id, label, ref, progress, size, rate, onChange }) {
+export default function FileInput({ id, label, ref, progress, size, rate, onChange, accept }) {
 
 
     return (
@@ -16,7 +16,7 @@ export default function FileInput({ id, label, ref, progress, size, rate, onChan
                     <UploadProgress progress={progress} size={size} rate={rate}/>
                 </div>
             </label>
-            <input ref={ref} id={id} name="file" accept="image/*" type="file" className="h-0 p-0 invisible" onChange={onChange}></input>
+            <input ref={ref} id={id} name="file" accept={accept} type="file" className="h-0 p-0 invisible" onChange={onChange}></input>
         </div>
     )
 }

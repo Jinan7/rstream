@@ -21,7 +21,8 @@ pub struct Movie {
     pub stars: Vec<String>,
     pub summary: String,
     pub portrait_url: Option<String>,
-    pub banner_url: Option<String>
+    pub banner_url: Option<String>,
+    pub video_url: Option<String>
 }
 
 #[derive(Serialize)]
@@ -102,9 +103,10 @@ async fn insert_movie(
             stars,
             summary,
             portrait_url,
-            banner_url
+            banner_url,
+            video_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, '', '')"#,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, '', '', '')"#,
         id,
         movie.title,
         movie.release_date,
