@@ -9,6 +9,7 @@ pub mod series;
 pub mod seasons;
 pub mod episodes;
 pub mod posters;
+pub mod videos;
 
 
 pub use health_check::*;

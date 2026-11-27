@@ -11,5 +11,6 @@ CREATE TABLE movies(
     stars TEXT[] NOT NULL,
     summary TEXT NOT NULL,
     portrait_url TEXT NOT NULL,
-    banner_url TEXT NOT NULL
+    banner_url TEXT NOT NULL,
+    video_url TEXT NOT NULL
 );
